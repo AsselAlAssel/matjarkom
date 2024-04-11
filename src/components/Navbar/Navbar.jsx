@@ -105,7 +105,6 @@ const Navbar = ({ handleOrderPopup }) => {
 
           {/* Navbar Right section */}
           <div className="flex justify-between items-center gap-4">
-
             {/* Order-button section */}
             <button className="relative p-3" onClick={handleOrderPopup}>
               <FaCartShopping className="text-xl text-gray-600 dark:text-gray-400" />
