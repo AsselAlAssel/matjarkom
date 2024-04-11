@@ -1,8 +1,7 @@
 import React from "react";
 import Navbar from "./components/Navbar/Navbar";
 import Hero from "./components/Hero/Hero";
-import Category from "./components/Category/Category";
-import Category2 from "./components/Category/Category2";
+import Categories from "./components/Categories/Categories.jsx";
 import Services from "./components/Services/Services";
 import Banner from "./components/Banner/Banner";
 import Partners from "./components/Partners/Partners.jsx";
@@ -16,6 +15,9 @@ import Footer from "./components/Footer/Footer.jsx";
 import Popup from "./components/Popup/Popup.jsx";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { Provider as ProviderRedux } from "react-redux";
+import Store from "./Stores/Store.js";
+import CategoryForm from "./components/CategoryForm/CategoryForm.jsx";
 
 const BannerData = {
   discount: "30% OFF",
@@ -43,6 +45,8 @@ const BannerData2 = {
 
 const App = () => {
   const [orderPopup, setOrderPopup] = React.useState(false);
+  const [openCategoryForm, setOpenCategoryForm] = React.useState(false);
+  const [selectedCategory, setSelectedCategory] = React.useState(null);
 
   const handleOrderPopup = () => {
     setOrderPopup(!orderPopup);
@@ -59,20 +63,33 @@ const App = () => {
   }, []);
 
   return (
-    <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 overflow-hidden">
-      <Navbar handleOrderPopup={handleOrderPopup} />
-      <Hero handleOrderPopup={handleOrderPopup} />
-      <Category />
-      <Category2 />
-      <Services />
-      <Banner data={BannerData} />
-      <Products />
-      <Banner data={BannerData2} />
-      <Blogs />
-      <Partners />
-      <Footer />
-      <Popup orderPopup={orderPopup} handleOrderPopup={handleOrderPopup} />
-    </div>
+    <ProviderRedux store={Store}>
+      <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 overflow-hidden">
+        <Navbar />
+        <Hero />
+        <Categories
+          openCategoryForm={() => setOpenCategoryForm(true)}
+          handleOrderPopup={handleOrderPopup}
+          setSelectedCategory={setSelectedCategory}
+        />
+        <Services />
+        <Banner data={BannerData} />
+        <Products />
+        <Banner data={BannerData2} />
+        <Blogs />
+        <Partners />
+        <Footer />
+        <CategoryForm
+          open={openCategoryForm}
+          handleClose={() => {
+            setOpenCategoryForm(false);
+            setSelectedCategory(null);
+          }}
+          selectedCategory={selectedCategory}
+        />
+        <Popup orderPopup={orderPopup} handleOrderPopup={handleOrderPopup} />
+      </div>
+    </ProviderRedux>
   );
 };
 
