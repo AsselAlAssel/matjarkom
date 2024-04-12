@@ -3,15 +3,12 @@ import Slider from "react-slick";
 import Image1 from "../../assets/hero/headphone.png";
 import Image2 from "../../assets/category/vr.png";
 import Image3 from "../../assets/category/macbook.png";
-import Button from "../Shared/Button";
-import HeroForm from "../HeroForm/HEroForm";
+import HeroForm from "../HeroForm/HeroForm";
 import ActionsIconButton from "../ActionsIconButton/ActionsIconButton";
-import zIndex from "@mui/material/styles/zIndex";
 import { Menu, MenuItem } from "@mui/material";
 import usePopoverState from "../../hooks/usePopoverState";
 import HeroPlaceHolder from "./HeroPlaceHolder";
 import DeleteDialog from "../DeleteDialog/DeleteDialog";
-import { set } from "react-hook-form";
 
 const HeroData = [
   {
