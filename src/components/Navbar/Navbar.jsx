@@ -4,6 +4,7 @@ import { FaCaretDown, FaCartShopping } from "react-icons/fa6";
 import DarkMode from "./DarkMode";
 import orders, { getOrder } from "../../Stores/project/orders";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const MenuLinks = [
   {
@@ -53,13 +54,13 @@ const Navbar = () => {
         <div className="container flex justify-between items-center">
           {/* Logo and Links section */}
           <div className="flex items-center gap-4">
-            <a
-              href="#"
+            <Link
+              to="/"
               className="text-primary font-semibold tracking-widest text-2xl uppercase sm:text-3xl
 "
             >
               Eshop
-            </a>
+            </Link>
             {/* Menu Items */}
             <div className="hidden lg:block">
               <ul className="flex items-center gap-4">
@@ -90,7 +91,7 @@ const Navbar = () => {
                   <div className="absolute z-[9999] hidden group-hover:block w-[200px] rounded-md bg-white shadow-md dark:bg-gray-900 p-2 dark:text-white ">
                     <ul className="space-y-2">
                       {DropdownLinks.map((data, index) => (
-                        <li>
+                        <li key={index}>
                           <a
                             className="text-gray-500  dark:hover:text-white duration-200 inline-block w-full p-2 hover:bg-primary/20 rounded-md font-semibold"
                             href={data.link}

@@ -4,6 +4,7 @@ import Button from "../Shared/Button";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import { FaEdit } from "react-icons/fa";
+import ActionsIconButton from "../ActionsIconButton/ActionsIconButton";
 
 const CategoryCard = ({ setSelectedCategory, openCategoryForm }) => {
   return (
@@ -13,26 +14,13 @@ const CategoryCard = ({ setSelectedCategory, openCategoryForm }) => {
         background: `linear-gradient(rgba(0, 0, 0, 0) -34.58%, rgb(0, 0, 0) 56.09%), url(${image}) center center / cover no-repeat, 50% center / cover no-repeat lightgray`,
       }}
     >
-      <IconButton
+      <ActionsIconButton
         sx={{
-          height: "40px",
-          width: "40px",
-          borderRadius: "8px",
           position: "absolute",
           top: "10px",
           right: "10px",
-          background: "rgba(0, 0, 0, 0.5)",
         }}
-        onClick={() => {
-          setSelectedCategory({
-            name: "Earphone",
-            description: "Enjoy with Earphone",
-          });
-          openCategoryForm();
-        }}
-      >
-        <FaEdit className="text-white" />
-      </IconButton>
+      />
       <div>
         <div className="mb-4">
           <p className="mb-[2px] text-gray-400">Enjoy</p>
