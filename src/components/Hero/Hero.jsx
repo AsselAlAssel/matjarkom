@@ -1,36 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import Slider from "react-slick";
 import Image1 from "../../assets/hero/headphone.png";
 import Image2 from "../../assets/category/vr.png";
 import Image3 from "../../assets/category/macbook.png";
 import Button from "../Shared/Button";
+import HeroForm from "../HeroForm/HEroForm";
+import ActionsIconButton from "../ActionsIconButton/ActionsIconButton";
+import zIndex from "@mui/material/styles/zIndex";
+import { Menu, MenuItem } from "@mui/material";
+import usePopoverState from "../../hooks/usePopoverState";
+import HeroPlaceHolder from "./HeroPlaceHolder";
+import DeleteDialog from "../DeleteDialog/DeleteDialog";
+import { set } from "react-hook-form";
 
 const HeroData = [
   {
     id: 1,
     img: Image1,
-    subtitle: "Beats Solo",
     title: "Wireless",
     title2: "Headphone",
   },
   {
     id: 2,
     img: Image2,
-    subtitle: "Beats Solo",
     title: "Wireless",
     title2: "Virtual",
   },
   {
     id: 1,
     img: Image3,
-    subtitle: "Beats Solo",
-    title: "Branded",
-    title2: "Laptops",
-  },
-  {
-    id: 1,
-    img: Image3,
-    subtitle: "Beats Solo",
     title: "Branded",
     title2: "Laptops",
   },
@@ -38,17 +36,18 @@ const HeroData = [
 
 const Hero = () => {
   const settings = {
-    dots: false,
+    dots: true,
     arrows: false,
     infinite: true,
     speed: 800,
     slidesToScroll: 1,
-    // autoplay: true,
     autoplaySpeed: 4000,
     cssEase: "ease-in-out",
-    pauseOnHover: false,
-    pauseOnFocus: true,
   };
+  const [open, setOpen] = useState(false);
+  const [selectedHero, setSelectedHero] = useState(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [openMenu, anchorEl, handleOpen, handleClose] = usePopoverState();
   return (
     <div className="container">
       <div
@@ -59,18 +58,18 @@ const Hero = () => {
           {/* Hero section */}
           <Slider {...settings}>
             {HeroData.map((data) => (
-              <div key={data.id}>
+              <div key={data.id} className="relative">
+                <ActionsIconButton
+                  sx={{ position: "absolute", right: 0, top: 0, zIndex: 1000 }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedHero(data);
+                    handleOpen(e);
+                  }}
+                />
                 <div className="grid grid-cols-1 sm:grid-cols-2">
                   {/* text content section */}
                   <div className="flex flex-col justify-center gap-4 sm:pl-3 pt-12 sm:pt-0 text-center sm:text-left order-2 sm:order-1 relative z-10 ">
-                    <h1
-                      data-aos="zoom-out"
-                      data-aos-duration="500"
-                      data-aos-once="true"
-                      className="text-2xl sm:text-6xl lg:text-2xl font-bold"
-                    >
-                      {data.subtitle}
-                    </h1>
                     <h1
                       data-aos="zoom-out"
                       data-aos-duration="500"
@@ -87,18 +86,6 @@ const Hero = () => {
                     >
                       {data.title2}
                     </h1>
-                    <div
-                      data-aos="fade-up"
-                      data-aos-offset="0"
-                      data-aos-duration="500"
-                      data-aos-delay="300"
-                    >
-                      <Button
-                        text="Shop By Category"
-                        bgColor="bg-primary"
-                        textColor="text-white"
-                      />
-                    </div>
                   </div>
                   {/* Img section */}
                   <div className="order-1 sm:order-2">
@@ -117,9 +104,54 @@ const Hero = () => {
                 </div>
               </div>
             ))}
+            <HeroPlaceHolder openForm={() => setOpen(true)} />
           </Slider>
         </div>
       </div>
+      <HeroForm
+        open={open}
+        handleClose={() => {
+          setOpen(false);
+          setSelectedHero(null);
+        }}
+        selectedHero={selectedHero}
+      />
+      <Menu
+        open={openMenu}
+        anchorEl={anchorEl}
+        onClose={() => {
+          setSelectedHero(null);
+          handleClose();
+        }}
+      >
+        <MenuItem
+          onClick={() => {
+            setOpen(true);
+            handleClose();
+          }}
+        >
+          Edit Hero
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            setDeleteDialogOpen(true);
+            handleClose();
+          }}
+        >
+          Delete Hero
+        </MenuItem>
+      </Menu>
+      <DeleteDialog
+        deleteDialogOpen={deleteDialogOpen}
+        handleDeleteDialogClose={() => {
+          setDeleteDialogOpen(false);
+        }}
+        handleDelete={() => {
+          setDeleteDialogOpen(false);
+        }}
+        title={"Delete Hero"}
+        description={"Are you sure you want to delete this hero?"}
+      />
     </div>
   );
 };

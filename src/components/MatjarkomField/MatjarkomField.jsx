@@ -16,13 +16,7 @@ export default function MatjarkomField(props) {
           {props.label}
         </InputLabel>
       ) : null}
-      <TextField
-        label={""}
-        id={id}
-        {...rest}
-        className="dark:bg-gray-800 dark:text-white"
-        inputProps={{ className: "dark:text-white" }}
-      />
+      <TextField label={""} id={id} {...rest} />
     </>
   );
 }
