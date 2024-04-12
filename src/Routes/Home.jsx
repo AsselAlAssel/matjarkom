@@ -3,7 +3,6 @@ import Navbar from "../components/Navbar/Navbar";
 import Hero from "../components/Hero/Hero";
 import Categories from "../components/Categories/Categories.jsx";
 import Services from "../components/Services/Services";
-import Partners from "../components/Partners/Partners.jsx";
 import Banner from "../components/Banner/Banner";
 import headphone from "../assets/hero/headphone.png";
 import Products from "../components/Products/Products";
@@ -12,7 +11,6 @@ import Footer from "../components/Footer/Footer.jsx";
 import Popup from "../components/Popup/Popup.jsx";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import CategoryForm from "../components/CategoryForm/CategoryForm.jsx";
 
 const BannerData = {
   discount: "30% OFF",
@@ -27,8 +25,6 @@ const BannerData = {
 };
 const Home = () => {
   const [orderPopup, setOrderPopup] = React.useState(false);
-  const [openCategoryForm, setOpenCategoryForm] = React.useState(false);
-  const [selectedCategory, setSelectedCategory] = React.useState(null);
 
   const handleOrderPopup = () => {
     setOrderPopup(!orderPopup);
@@ -48,25 +44,13 @@ const Home = () => {
     <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 overflow-hidden">
       <Navbar />
       <Hero />
-      <Categories
-        openCategoryForm={() => setOpenCategoryForm(true)}
-        handleOrderPopup={handleOrderPopup}
-        setSelectedCategory={setSelectedCategory}
-      />
+      <Categories />
       <Services />
       <Banner data={BannerData} />
       <Products />
       <Blogs />
-      <Partners />
       <Footer />
-      <CategoryForm
-        open={openCategoryForm}
-        handleClose={() => {
-          setOpenCategoryForm(false);
-          setSelectedCategory(null);
-        }}
-        selectedCategory={selectedCategory}
-      />
+
       <Popup orderPopup={orderPopup} handleOrderPopup={handleOrderPopup} />
     </div>
   );

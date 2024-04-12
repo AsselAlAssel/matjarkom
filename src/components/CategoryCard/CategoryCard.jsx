@@ -6,7 +6,11 @@ import IconButton from "@mui/material/IconButton";
 import { FaEdit } from "react-icons/fa";
 import ActionsIconButton from "../ActionsIconButton/ActionsIconButton";
 
-const CategoryCard = ({ setSelectedCategory, openCategoryForm }) => {
+const CategoryCard = ({
+  setSelectedCategory,
+  openCategoryForm,
+  handleOpen,
+}) => {
   return (
     <Box
       className="py-10 pl-5 text-white rounded-3xl relative h-[320px] flex items-end"
@@ -19,6 +23,15 @@ const CategoryCard = ({ setSelectedCategory, openCategoryForm }) => {
           position: "absolute",
           top: "10px",
           right: "10px",
+        }}
+        onClick={(e) => {
+          setSelectedCategory({
+            id: 1,
+            name: "Headphone",
+            description:
+              "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+          });
+          handleOpen(e);
         }}
       />
       <div>

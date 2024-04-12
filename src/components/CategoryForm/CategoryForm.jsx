@@ -10,10 +10,8 @@ import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
-import TextField from "@mui/material/TextField";
 import { useForm, Controller } from "react-hook-form";
 import MatjarkomField from "../MatjarkomField/MatjarkomField";
-import { MdArchitecture } from "react-icons/md";
 
 const defaultValues = {
   name: "",
@@ -28,7 +26,13 @@ const CategoryForm = ({ open, handleClose, selectedCategory }) => {
       : defaultValues,
   });
   useEffect(() => {
-    reset({ ...selectedCategory, image: "" } || defaultValues);
+    if (selectedCategory) {
+      reset({
+        name: selectedCategory.name,
+        description: selectedCategory.description,
+        image: "",
+      });
+    }
   }, [selectedCategory]);
 
   const handleCloseDialog = () => {

@@ -6,6 +6,7 @@ import {
   FaLinkedin,
   FaLocationArrow,
 } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 
 const FooterLinks = [
   {
@@ -33,13 +34,13 @@ const Footer = () => {
         <div className="grid md:grid-cols-3 pb-20 pt-5">
           {/* company details */}
           <div className="py-8 px-4">
-            <a
-              href="#"
+            <Link
+              to="/"
               className="text-primary font-semibold tracking-widest text-2xl uppercase sm:text-3xl
 "
             >
               Eshop
-            </a>
+            </Link>
             <p className="text-gray-600 dark:text-white/70  lg:pr-24 pt-3">
               Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maiores
               alias cum
