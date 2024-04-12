@@ -6,9 +6,12 @@ import { Grid, Stack, Typography } from "@mui/material";
 import Button from "../components/Shared/Button";
 import MatjarkomField from "../components/MatjarkomField/MatjarkomField";
 import { digitsOnly } from "../utils/constant";
+import { useDispatch } from "react-redux";
+import { addOrder } from "../Stores/project/orders";
 
 export default function ProductDetails() {
   const { id } = useParams();
+  const dispatch = useDispatch();
   return (
     <div className="container">
       <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 overflow-hidden">
@@ -124,6 +127,17 @@ export default function ProductDetails() {
               text="Add to Cart"
               bgColor={"bg-primary"}
               textColor={"text-white"}
+              onClick={() => {
+                dispatch(
+                  addOrder({
+                    id: Math.random(),
+                    name: "headphone",
+                    price: 120,
+                    image: "headphone",
+                    qty: 1,
+                  }),
+                );
+              }}
             />
           </Grid>
         </Grid>
