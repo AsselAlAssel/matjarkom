@@ -9,43 +9,38 @@ import { Link } from "react-router-dom";
 const MenuLinks = [
   {
     id: 1,
-    name: "Home",
-    link: "/#",
+    name: "products",
+    link: "/products",
   },
-  {
-    id: 2,
-    name: "Shop",
-    link: "/#shop",
-  },
-  {
-    id: 3,
-    name: "About",
-    link: "/#about",
-  },
-  {
-    id: 4,
-    name: "Blogs",
-    link: "/#blog",
-  },
+  // {
+  //   id: 3,
+  //   name: "About",
+  //   link: "/#about",
+  // },
+  // {
+  //   id: 4,
+  //   name: "Blogs",
+  //   link: "/#blog",
+  // },
 ];
 
-const DropdownLinks = [
-  {
-    id: 1,
-    name: "Trending Products",
-    link: "/#",
-  },
-  {
-    id: 2,
-    name: "Best Selling",
-    link: "/#",
-  },
-  {
-    id: 3,
-    name: "Top Rated",
-    link: "/#",
-  },
-];
+// const DropdownLinks = [
+//   {
+//     id: 1,
+//     name: "Trending Products",
+//     link: "/#",
+//   },
+//   {
+//     id: 2,
+//     name: "Best Selling",
+//     link: "/#",
+//   },
+//   {
+//     id: 3,
+//     name: "Top Rated",
+//     link: "/#",
+//   },
+// ];
 const Navbar = () => {
   const orders = useSelector(getOrder);
   return (
@@ -66,16 +61,16 @@ const Navbar = () => {
               <ul className="flex items-center gap-4">
                 {MenuLinks.map((data, index) => (
                   <li key={index}>
-                    <a
-                      href={data.link}
+                    <Link
+                      to={data.link}
                       className="inline-block px-4 font-semibold text-gray-500 hover:text-black dark:hover:text-white duration-200"
                     >
                       {" "}
                       {data.name}
-                    </a>
+                    </Link>
                   </li>
                 ))}
-                {/* Dropdown  */}
+                {/*     Dropdown 
                 <li className="relative cursor-pointer group">
                   <a
                     href="#"
@@ -87,7 +82,7 @@ const Navbar = () => {
                     </span>
                   </a>
 
-                  {/* Dropdown Links */}
+                 Dropdown Links
                   <div className="absolute z-[9999] hidden group-hover:block w-[200px] rounded-md bg-white shadow-md dark:bg-gray-900 p-2 dark:text-white ">
                     <ul className="space-y-2">
                       {DropdownLinks.map((data, index) => (
@@ -103,6 +98,7 @@ const Navbar = () => {
                     </ul>
                   </div>
                 </li>
+              */}
               </ul>
             </div>
           </div>
