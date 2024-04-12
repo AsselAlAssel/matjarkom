@@ -10,6 +10,9 @@ import Img4 from "../../assets/product/p-4.jpg";
 import Img5 from "../../assets/product/p-5.jpg";
 import Img6 from "../../assets/product/p-9.jpg";
 import Img7 from "../../assets/product/p-7.jpg";
+import Button from "../Shared/Button";
+import { Stack } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const ProductsData = [
   {
@@ -38,6 +41,7 @@ const ProductsData = [
   },
 ];
 const Products = () => {
+  const navigate = useNavigate();
   return (
     <div>
       <div className="container">
@@ -57,6 +61,20 @@ const Products = () => {
               <ProductCard data={data} aosDelay={index * 150} />
             ))}
           </div>
+        </div>
+        <div
+          data-aos={"fade-up"}
+          data-aos-delay={100}
+          className="flex justify-center"
+        >
+          <Button
+            text={"View All Products"}
+            bgColor={"bg-primary"}
+            textColor={"text-white"}
+            onClick={() => {
+              navigate("/products");
+            }}
+          />
         </div>
       </div>
     </div>
