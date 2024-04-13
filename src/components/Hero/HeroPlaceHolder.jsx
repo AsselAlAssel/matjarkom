@@ -5,7 +5,7 @@ import { IoIosAddCircle } from "react-icons/io";
 export default function HeroPlaceHolder({ openForm }) {
   return (
     <Box
-      className="bg-gray-100 dark:bg-gray-800 h-3[20px] flex justify-center items-center cursor-pointer  rounded-2xl"
+      className="bg-gray-100 dark:bg-gray-800 h-[400px] flex justify-center items-center cursor-pointer  rounded-2xl"
       onClick={openForm}
     >
       <IconButton aria-label="">

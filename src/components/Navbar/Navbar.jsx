@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { IoMdSearch } from "react-icons/io";
 import { FaCaretDown, FaCartShopping } from "react-icons/fa6";
 import DarkMode from "./DarkMode";
 import orders, { getOrder } from "../../Stores/project/orders";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { Button } from "@mui/material";
+import { Button, Drawer } from "@mui/material";
+import SideBar from "../SideBar/SideBar";
 
 const MenuLinks = [
   {
@@ -45,6 +46,7 @@ const MenuLinks = [
 const Navbar = ({ hideCart }) => {
   const orders = useSelector(getOrder);
   const navigate = useNavigate();
+  const [openDrawer, setOpenDrawer] = useState(false);
   return (
     <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 relative z-40">
       <div className="py-4">
@@ -109,7 +111,10 @@ const Navbar = ({ hideCart }) => {
           <div className="flex justify-between items-center gap-4">
             {/* Order-button section */}
             {hideCart ? null : (
-              <button className="relative p-3">
+              <button
+                className="relative p-3"
+                onClick={() => setOpenDrawer(true)}
+              >
                 <FaCartShopping className="text-xl text-gray-600 dark:text-gray-400" />
                 <div className="w-4 h-4 bg-red-500 text-white rounded-full absolute top-0 right-0 flex items-center justify-center text-xs">
                   {orders.length}
@@ -139,6 +144,7 @@ const Navbar = ({ hideCart }) => {
           </div>
         </div>
       </div>
+      <SideBar openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} />
     </div>
   );
 };

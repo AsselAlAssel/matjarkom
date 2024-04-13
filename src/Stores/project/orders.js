@@ -6,7 +6,7 @@ const initialState = {
       id: 1,
       name: "headphone",
       price: 120,
-      image: "headphone",
+      image: "https://picsum.photos/200/300",
       qty: 1,
     },
   ],
