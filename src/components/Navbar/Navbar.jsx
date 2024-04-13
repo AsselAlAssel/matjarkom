@@ -4,7 +4,8 @@ import { FaCaretDown, FaCartShopping } from "react-icons/fa6";
 import DarkMode from "./DarkMode";
 import orders, { getOrder } from "../../Stores/project/orders";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "@mui/material";
 
 const MenuLinks = [
   {
@@ -41,8 +42,9 @@ const MenuLinks = [
 //     link: "/#",
 //   },
 // ];
-const Navbar = () => {
+const Navbar = ({ hideCart }) => {
   const orders = useSelector(getOrder);
+  const navigate = useNavigate();
   return (
     <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 relative z-40">
       <div className="py-4">
@@ -106,15 +108,33 @@ const Navbar = () => {
           {/* Navbar Right section */}
           <div className="flex justify-between items-center gap-4">
             {/* Order-button section */}
-            <button className="relative p-3">
-              <FaCartShopping className="text-xl text-gray-600 dark:text-gray-400" />
-              <div className="w-4 h-4 bg-red-500 text-white rounded-full absolute top-0 right-0 flex items-center justify-center text-xs">
-                {orders.length}
-              </div>
-            </button>
+            {hideCart ? null : (
+              <button className="relative p-3">
+                <FaCartShopping className="text-xl text-gray-600 dark:text-gray-400" />
+                <div className="w-4 h-4 bg-red-500 text-white rounded-full absolute top-0 right-0 flex items-center justify-center text-xs">
+                  {orders.length}
+                </div>
+              </button>
+            )}
             {/* Dark Mode section */}
             <div>
-              <DarkMode />
+              {/* <DarkMode /> */}
+              <Button
+                onClick={() => {
+                  navigate("/login");
+                }}
+                sx={{
+                  backgroundColor: "black",
+                  fontSize: "1rem",
+                  fontWeight: "bold",
+                  color: "white",
+                  "&:hover": {
+                    backgroundColor: "black",
+                  },
+                }}
+              >
+                Sign In
+              </Button>
             </div>
           </div>
         </div>
