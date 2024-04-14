@@ -6,7 +6,7 @@ import StoreCard from "../components/StoreCard/StoreCard";
 import Button from "../components/Shared/Button";
 import { Autocomplete, Box, Stack, TextField, Typography } from "@mui/material";
 import Footer from "../components/Footer/Footer";
-const StoreCategories = [
+export const StoreCategories = [
   {
     title: "All",
     value: "all",
@@ -52,8 +52,9 @@ export default function Stores() {
             py: 4,
           }}
         >
+          <Heading title="Stores" subtitle="Explore Our Stores" />
+
           <Stack
-            mt={2}
             sx={{
               flexDirection: {
                 xs: "column",
@@ -64,6 +65,7 @@ export default function Stores() {
                 xs: 1,
                 sm: 2,
               },
+              my: 2,
             }}
           >
             <Typography variant="h6">Filter by Category:</Typography>
@@ -76,7 +78,6 @@ export default function Stores() {
               defaultValue={StoreCategories[0]}
             />
           </Stack>
-          <Heading title="Stores" subtitle="Explore Our Stores" />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 lg:px-10 gap-8">
             {stores.map((store, index) => (
               <StoreCard key={index} storeData={store} />

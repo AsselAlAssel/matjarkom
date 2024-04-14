@@ -6,6 +6,8 @@ import Img3 from "../assets/product/p-3.jpg";
 import Img4 from "../assets/product/p-4.jpg";
 import Heading from "../components/Shared/Heading";
 import ProductCard from "../components/Products/ProductCard";
+import { Autocomplete, Stack, TextField, Typography } from "@mui/material";
+import { StoreCategories } from "./Stores";
 
 const ProductsData = [
   {
@@ -41,6 +43,30 @@ export default function Products() {
       <div>
         <div className="container">
           <Heading title="Our Products" subtitle={"Explore Our Products"} />
+          <Stack
+            sx={{
+              flexDirection: {
+                xs: "column",
+                sm: "row",
+              },
+              alignItems: "center",
+              gap: {
+                xs: 1,
+                sm: 2,
+              },
+              my: 2,
+            }}
+          >
+            <Typography variant="h6">Filter by Category:</Typography>
+            <Autocomplete
+              options={StoreCategories}
+              getOptionLabel={(option) => option.title}
+              style={{ maxWidth: 300, minWidth: 200 }}
+              size="small"
+              renderInput={(params) => <TextField {...params} />}
+              defaultValue={StoreCategories[0]}
+            />
+          </Stack>
           <div className="mb-10">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 place-items-center">
               {ProductsData.map((data) => (
