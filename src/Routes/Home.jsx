@@ -5,6 +5,7 @@ import Heading from "../components/Shared/Heading";
 import Button from "../components/Shared/Button";
 import { Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import Footer from "../components/Footer/Footer";
 
 export const stores = [
   {
@@ -59,6 +60,11 @@ export default function Home() {
           </Stack>
         </div>
       </div>
+      <Footer
+        logo={"MATJARKOM"}
+        logoLink={"/"}
+        companyDetails="Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maiores alias cum"
+      />
     </div>
   );
 }
