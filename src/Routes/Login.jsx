@@ -27,7 +27,12 @@ export default function Login() {
   return (
     <div className="container">
       <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 overflow-hidden">
-        <Navbar hideCart={true} />
+        <Navbar
+          hideCart={true}
+          links={[{ to: "/stores", title: "Stores" }]}
+          logo={"MATJARKOM"}
+          logoLink={"/"}
+        />
         <Box
           sx={{
             marginTop: 8,

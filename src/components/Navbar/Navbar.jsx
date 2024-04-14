@@ -43,7 +43,7 @@ const MenuLinks = [
 //     link: "/#",
 //   },
 // ];
-const Navbar = ({ hideCart }) => {
+const Navbar = ({ hideCart, links, logo, logoLink }) => {
   const orders = useSelector(getOrder);
   const navigate = useNavigate();
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -53,27 +53,39 @@ const Navbar = ({ hideCart }) => {
         <div className="container flex justify-between items-center">
           {/* Logo and Links section */}
           <div className="flex items-center gap-4">
+            {/* TODO:add link for store here */}
             <Link
-              to="/"
+              to={logoLink ? logoLink : "/"}
               className="text-primary font-semibold tracking-widest text-2xl uppercase sm:text-3xl
 "
             >
-              Eshop
+              {logo ? logo : "LOGO here"}
             </Link>
             {/* Menu Items */}
             <div className="hidden lg:block">
               <ul className="flex items-center gap-4">
-                {MenuLinks.map((data, index) => (
-                  <li key={index}>
-                    <Link
-                      to={data.link}
-                      className="inline-block px-4 font-semibold text-gray-500 hover:text-black dark:hover:text-white duration-200"
-                    >
-                      {" "}
-                      {data.name}
-                    </Link>
-                  </li>
-                ))}
+                {links
+                  ? links.map((data, index) => (
+                      <li key={index}>
+                        <Link
+                          to={data.to}
+                          className="inline-block px-4 font-semibold text-gray-500 hover:text-black dark:hover:text-white duration-200"
+                        >
+                          {data.title}
+                        </Link>
+                      </li>
+                    ))
+                  : MenuLinks.map((data, index) => (
+                      <li key={index}>
+                        <Link
+                          to={data.link}
+                          className="inline-block px-4 font-semibold text-gray-500 hover:text-black dark:hover:text-white duration-200"
+                        >
+                          {" "}
+                          {data.name}
+                        </Link>
+                      </li>
+                    ))}
                 {/*     Dropdown 
                 <li className="relative cursor-pointer group">
                   <a

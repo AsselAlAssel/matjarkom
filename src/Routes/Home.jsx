@@ -1,59 +1,64 @@
 import React from "react";
 import Navbar from "../components/Navbar/Navbar";
-import Hero from "../components/Hero/Hero";
-import Categories from "../components/Categories/Categories.jsx";
-import Services from "../components/Services/Services";
-import Banner from "../components/Banner/Banner";
-import headphone from "../assets/hero/headphone.png";
-import Products from "../components/Products/Products";
-import Blogs from "../components/Blogs/Blogs";
-import Footer from "../components/Footer/Footer.jsx";
-import Popup from "../components/Popup/Popup.jsx";
-import AOS from "aos";
-import "aos/dist/aos.css";
+import StoreCard from "../components/StoreCard/StoreCard";
+import Heading from "../components/Shared/Heading";
+import Button from "../components/Shared/Button";
+import { Stack } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
-const BannerData = {
-  discount: "30% OFF",
-  title: "Fine Smile",
-  date: "10 Jan to 28 Jan",
-  image: headphone,
-  title2: "Air Solo Bass",
-  title3: "Winter Sale",
-  title4:
-    "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eaque reiciendis",
-  bgColor: "#f42c37",
-};
-const Home = () => {
-  const [orderPopup, setOrderPopup] = React.useState(false);
+export const stores = [
+  {
+    name: "Store 1",
+    image: "https://via.placeholder.com/150",
+    description: "This is store 1",
+  },
+  {
+    name: "Store 2",
+    image: "https://via.placeholder.com/150",
+    description: "This is store 2",
+  },
+  {
+    name: "Store 3",
+    image: "https://via.placeholder.com/150",
+    description: "This is store 3",
+  },
+  {
+    name: "Store 4",
+    image: "https://via.placeholder.com/150",
+    description: "This is store 4",
+  },
+];
 
-  const handleOrderPopup = () => {
-    setOrderPopup(!orderPopup);
-  };
-
-  React.useEffect(() => {
-    AOS.init({
-      duration: 800,
-      easing: "ease-in-sine",
-      delay: 100,
-      offset: 100,
-    });
-    AOS.refresh();
-  }, []);
-
+export default function Home() {
+  const navigate = useNavigate();
   return (
-    <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 overflow-hidden">
-      <Navbar />
-      <Hero />
-      <Categories />
-      <Services />
-      <Banner data={BannerData} />
-      <Products />
-      <Blogs />
-      <Footer />
-
-      <Popup orderPopup={orderPopup} handleOrderPopup={handleOrderPopup} />
+    <div className="container">
+      <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 overflow-hidden">
+        <Navbar
+          hideCart={true}
+          links={[{ to: "/stores", title: "Stores" }]}
+          logo={"MATJARKOM"}
+          logoLink={"/"}
+        />
+        <div className="py-8">
+          <Heading title="Stores" subtitle="Explore Our Stores" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 lg:px-10 gap-8">
+            {stores.map((store, index) => (
+              <StoreCard key={index} storeData={store} />
+            ))}
+          </div>
+          <Stack direction="row" mt={2} justifyContent="center">
+            <Button
+              text={"View All Stores"}
+              bgColor={"bg-primary"}
+              textColor={"text-white"}
+              onClick={() => {
+                navigate("/stores");
+              }}
+            />
+          </Stack>
+        </div>
+      </div>
     </div>
   );
-};
-
-export default Home;
+}
