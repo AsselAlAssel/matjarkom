@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar/Navbar";
 import StoreCard from "../components/StoreCard/StoreCard";
 import Heading from "../components/Shared/Heading";
 import Button from "../components/Shared/Button";
-import { Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer/Footer";
 import useStores from "../hooks/useStores";
@@ -21,24 +21,33 @@ export default function Home() {
           logo={"MATJARKOM"}
           logoLink={"/"}
         />
-        <div className="py-8">
+        <Box
+          className="py-8"
+          sx={{
+            minHeight: "calc(100vh - 200px)",
+          }}
+        >
           <Heading title="Stores" subtitle="Explore Our Stores" />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 lg:px-10 gap-8">
-            {data?.map((store, index) => (
+            {data?.slice(0, 6).map((store, index) => (
               <StoreCard key={index} storeData={store} />
             ))}
           </div>
           <Stack direction="row" mt={2} justifyContent="center">
-            <Button
-              text={"View All Stores"}
-              bgColor={"bg-primary"}
-              textColor={"text-white"}
-              onClick={() => {
-                navigate("/stores");
-              }}
-            />
+            {isLoading ? (
+              <p>Loading...</p>
+            ) : (
+              <Button
+                text={"View All Stores"}
+                bgColor={"bg-primary"}
+                textColor={"text-white"}
+                onClick={() => {
+                  navigate("/stores");
+                }}
+              />
+            )}
           </Stack>
-        </div>
+        </Box>
       </div>
       <Footer
         logo={"MATJARKOM"}

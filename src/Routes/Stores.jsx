@@ -5,6 +5,7 @@ import StoreCard from "../components/StoreCard/StoreCard";
 import Button from "../components/Shared/Button";
 import { Autocomplete, Box, Stack, TextField, Typography } from "@mui/material";
 import Footer from "../components/Footer/Footer";
+import useStores from "../hooks/useStores";
 export const StoreCategories = [
   {
     title: "All",
@@ -37,6 +38,8 @@ export const StoreCategories = [
 ];
 
 export default function Stores() {
+  const { data, error, isLoading, mutate } = useStores();
+
   return (
     <div className="container">
       <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 overflow-hidden">
@@ -49,6 +52,7 @@ export default function Stores() {
         <Box
           sx={{
             py: 4,
+            minHeight: "calc(100vh - 200px)",
           }}
         >
           <Heading title="Stores" subtitle="Explore Our Stores" />
@@ -77,10 +81,11 @@ export default function Stores() {
               defaultValue={StoreCategories[0]}
             />
           </Stack>
+          {isLoading ? <p className="text-center ">Loading...</p> : null}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 lg:px-10 gap-8">
-            {/* {stores.map((store, index) => (
+            {data?.map((store, index) => (
               <StoreCard key={index} storeData={store} />
-            ))} */}
+            ))}
           </div>
         </Box>
       </div>

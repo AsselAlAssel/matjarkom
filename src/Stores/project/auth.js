@@ -3,6 +3,7 @@ const initialState = {
   user: {
     email: "",
     token: "",
+    type: "user",
   },
 };
 
