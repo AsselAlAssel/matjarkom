@@ -6,31 +6,11 @@ import Button from "../components/Shared/Button";
 import { Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer/Footer";
-
-export const stores = [
-  {
-    name: "Store 1",
-    image: "https://via.placeholder.com/150",
-    description: "This is store 1",
-  },
-  {
-    name: "Store 2",
-    image: "https://via.placeholder.com/150",
-    description: "This is store 2",
-  },
-  {
-    name: "Store 3",
-    image: "https://via.placeholder.com/150",
-    description: "This is store 3",
-  },
-  {
-    name: "Store 4",
-    image: "https://via.placeholder.com/150",
-    description: "This is store 4",
-  },
-];
+import useStores from "../hooks/useStores";
 
 export default function Home() {
+  const { data, error, isLoading, mutate } = useStores();
+  console.log(data);
   const navigate = useNavigate();
   return (
     <div className="container">
@@ -44,7 +24,7 @@ export default function Home() {
         <div className="py-8">
           <Heading title="Stores" subtitle="Explore Our Stores" />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 lg:px-10 gap-8">
-            {stores.map((store, index) => (
+            {data?.map((store, index) => (
               <StoreCard key={index} storeData={store} />
             ))}
           </div>

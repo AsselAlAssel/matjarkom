@@ -1,7 +1,6 @@
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
@@ -13,17 +12,31 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Navbar from "../components/Navbar/Navbar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import useLoginUser from "../hooks/useUser";
+import { useDispatch } from "react-redux";
+import { saveUserData } from "../Stores/project/auth";
 
 export default function Login() {
-  const handleSubmit = (event) => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const dispatch = useDispatch();
+  const redirect = searchParams.get("redirect");
+  console.log(redirect);
+  const { login, data, error, isLoading } = useLoginUser();
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
+    await login({
+      email: event.target.email.value,
+      password: event.target.password.value,
     });
   };
+
+  if (data) {
+    localStorage.setItem("token", data.data.token);
+    dispatch(saveUserData(data.data));
+    navigate(redirect ? redirect : "/");
+  }
   return (
     <div className="container">
       <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 overflow-hidden">
@@ -32,6 +45,7 @@ export default function Login() {
           links={[{ to: "/stores", title: "Stores" }]}
           logo={"MATJARKOM"}
           logoLink={"/"}
+          hideSignIn={true}
         />
         <Box
           sx={{
@@ -82,6 +96,7 @@ export default function Login() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={isLoading}
             >
               Sign In
             </Button>

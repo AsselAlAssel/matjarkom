@@ -2,15 +2,25 @@ import { Box, Button, Stack } from "@mui/material";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import MatjarkomField from "../MatjarkomField/MatjarkomField";
+import { useRegisterUser } from "../../hooks/useUser";
 
 const defaultValues = {
-  name: "",
+  username: "",
   email: "",
   password: "",
+  phone: "",
+  country: "",
+  street: "",
 };
 
 export default function UserForm() {
   const { control, reset, handleSubmit } = useForm({ defaultValues });
+  const { register, data: ds } = useRegisterUser();
+  const handleRegister = async (data) => {
+    console.log(data);
+    await register(data);
+    console.log(ds);
+  };
   return (
     <Box
       sx={{
@@ -26,13 +36,13 @@ export default function UserForm() {
       <form>
         <Stack spacing={2}>
           <Controller
-            name="name"
+            name="username"
             control={control}
-            rules={{ required: "Name is required" }}
+            rules={{ required: "Username is required" }}
             render={({ field, fieldState: { error } }) => (
               <MatjarkomField
                 {...field}
-                label="Name"
+                label="Username"
                 required
                 error={!!error}
                 helperText={error ? error.message : null}
@@ -68,6 +78,46 @@ export default function UserForm() {
               />
             )}
           />
+          <Controller
+            name="phone"
+            control={control}
+            rules={{ required: "Phone is required" }}
+            render={({ field, fieldState: { error } }) => (
+              <MatjarkomField
+                {...field}
+                label="Phone"
+                required
+                error={!!error}
+                helperText={error ? error.message : null}
+              />
+            )}
+          />
+          <Controller
+            name="country"
+            control={control}
+            rules={{ required: "Country is required" }}
+            render={({ field, fieldState: { error } }) => (
+              <MatjarkomField
+                {...field}
+                label="Country"
+                required
+                error={!!error}
+                helperText={error ? error.message : null}
+              />
+            )}
+          />
+          <Controller
+            name="street"
+            control={control}
+            render={({ field, fieldState: { error } }) => (
+              <MatjarkomField
+                {...field}
+                label="Street"
+                error={!!error}
+                helperText={error ? error.message : null}
+              />
+            )}
+          />
 
           <Stack direction="row" spacing={2} justifyContent="center">
             <Button variant="contained" color="error" onClick={reset}>
@@ -77,8 +127,7 @@ export default function UserForm() {
               variant="contained"
               color="primary"
               onClick={handleSubmit((data) => {
-                console.log(data);
-                reset(defaultValues);
+                handleRegister(data);
               })}
             >
               Submit

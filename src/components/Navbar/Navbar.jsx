@@ -4,9 +4,15 @@ import { FaCaretDown, FaCartShopping } from "react-icons/fa6";
 import DarkMode from "./DarkMode";
 import orders, { getOrder } from "../../Stores/project/orders";
 import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useRouteError,
+} from "react-router-dom";
 import { Button, Drawer } from "@mui/material";
 import SideBar from "../SideBar/SideBar";
+import { selectUser } from "../../Stores/project/auth";
 
 const MenuLinks = [
   {
@@ -14,39 +20,14 @@ const MenuLinks = [
     name: "products",
     link: "/products",
   },
-  // {
-  //   id: 3,
-  //   name: "About",
-  //   link: "/#about",
-  // },
-  // {
-  //   id: 4,
-  //   name: "Blogs",
-  //   link: "/#blog",
-  // },
 ];
-
-// const DropdownLinks = [
-//   {
-//     id: 1,
-//     name: "Trending Products",
-//     link: "/#",
-//   },
-//   {
-//     id: 2,
-//     name: "Best Selling",
-//     link: "/#",
-//   },
-//   {
-//     id: 3,
-//     name: "Top Rated",
-//     link: "/#",
-//   },
-// ];
-const Navbar = ({ hideCart, links, logo, logoLink }) => {
+const Navbar = ({ hideCart, links, logo, logoLink, hideSignIn }) => {
   const orders = useSelector(getOrder);
   const navigate = useNavigate();
   const [openDrawer, setOpenDrawer] = useState(false);
+  const { pathname } = useLocation();
+  const user = useSelector(selectUser);
+  const ifUserLoggedIn = user?.email;
   return (
     <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 relative z-40">
       <div className="py-4">
@@ -86,35 +67,6 @@ const Navbar = ({ hideCart, links, logo, logoLink }) => {
                         </Link>
                       </li>
                     ))}
-                {/*     Dropdown 
-                <li className="relative cursor-pointer group">
-                  <a
-                    href="#"
-                    className="flex items-center gap-[2px] font-semibold text-gray-500 dark:hover:text-white py-2"
-                  >
-                    Quick Links
-                    <span>
-                      <FaCaretDown className="group-hover:rotate-180 duration-300" />
-                    </span>
-                  </a>
-
-                 Dropdown Links
-                  <div className="absolute z-[9999] hidden group-hover:block w-[200px] rounded-md bg-white shadow-md dark:bg-gray-900 p-2 dark:text-white ">
-                    <ul className="space-y-2">
-                      {DropdownLinks.map((data, index) => (
-                        <li key={index}>
-                          <a
-                            className="text-gray-500  dark:hover:text-white duration-200 inline-block w-full p-2 hover:bg-primary/20 rounded-md font-semibold"
-                            href={data.link}
-                          >
-                            {data.name}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </li>
-              */}
               </ul>
             </div>
           </div>
@@ -134,25 +86,48 @@ const Navbar = ({ hideCart, links, logo, logoLink }) => {
               </button>
             )}
             {/* Dark Mode section */}
-            <div>
-              {/* <DarkMode /> */}
-              <Button
-                onClick={() => {
-                  navigate("/login");
-                }}
-                sx={{
-                  backgroundColor: "black",
-                  fontSize: "1rem",
-                  fontWeight: "bold",
-                  color: "white",
-                  "&:hover": {
+            {hideSignIn || ifUserLoggedIn ? null : (
+              <div>
+                {/* <DarkMode /> */}
+                <Button
+                  onClick={() => {
+                    navigate(`/login?redirect=${pathname}`);
+                  }}
+                  sx={{
                     backgroundColor: "black",
-                  },
-                }}
-              >
-                Sign In
-              </Button>
-            </div>
+                    fontSize: "1rem",
+                    fontWeight: "bold",
+                    color: "white",
+                    "&:hover": {
+                      backgroundColor: "black",
+                    },
+                  }}
+                >
+                  Sign In
+                </Button>
+              </div>
+            )}
+            {ifUserLoggedIn ? (
+              <div>
+                {/* <DarkMode /> */}
+                <Button
+                  // onClick={() => {
+                  //   navigate(`/login?redirect=${pathname}`);
+                  // }}
+                  sx={{
+                    backgroundColor: "black",
+                    fontSize: "1rem",
+                    fontWeight: "bold",
+                    color: "white",
+                    "&:hover": {
+                      backgroundColor: "black",
+                    },
+                  }}
+                >
+                  Sign Out
+                </Button>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

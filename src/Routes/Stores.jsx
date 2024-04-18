@@ -1,7 +1,6 @@
 import React from "react";
 import Navbar from "../components/Navbar/Navbar";
 import Heading from "../components/Shared/Heading";
-import { stores } from "./Home";
 import StoreCard from "../components/StoreCard/StoreCard";
 import Button from "../components/Shared/Button";
 import { Autocomplete, Box, Stack, TextField, Typography } from "@mui/material";
@@ -79,9 +78,9 @@ export default function Stores() {
             />
           </Stack>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 lg:px-10 gap-8">
-            {stores.map((store, index) => (
+            {/* {stores.map((store, index) => (
               <StoreCard key={index} storeData={store} />
-            ))}
+            ))} */}
           </div>
         </Box>
       </div>
