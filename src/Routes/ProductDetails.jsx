@@ -42,7 +42,7 @@ export default function ProductDetails() {
               height={"100%"}
               width={"100%"}
             />
-            {product?.cartSecondaryImagesSlider?.map((image, index) => (
+            {/* {product?.cartSecondaryImagesSlider?.map((image, index) => (
               <img
                 key={index}
                 src={image}
@@ -50,7 +50,7 @@ export default function ProductDetails() {
                 height={"100%"}
                 width={"100%"}
               />
-            ))}
+            ))} */}
           </Grid>
           <Grid item xs={12} sm={6}>
             <Stack spacing={1} mb={5}>
