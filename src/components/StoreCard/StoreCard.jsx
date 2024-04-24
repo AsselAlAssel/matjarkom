@@ -2,9 +2,16 @@ import { Box } from "@mui/material";
 import React from "react";
 import Button from "../Shared/Button";
 import { useNavigate } from "react-router-dom";
+import { useStore } from "react-redux";
+import { getStoreProducts, getStoreProfile } from "../../hooks/useMerchant";
+import { preload } from "swr";
 
 export default function StoreCard({ storeData }) {
   const navigate = useNavigate();
+  const prefetchStore = () => {
+    preload(`merchant-profile/${storeData.email}`, getStoreProfile);
+    preload(`test-get-merchant-cart/${storeData.email}`, getStoreProducts);
+  };
   return (
     <Box
       className="py-10 pl-5 text-white rounded-3xl relative h-[320px] flex items-end"
@@ -23,9 +30,13 @@ export default function StoreCard({ storeData }) {
             text="Browse"
             bgColor={"bg-primary"}
             textColor={"text-white"}
-            onClick={() => {
-              navigate(`/store/:${storeData.storeName}`);
+            onMouseEnter={() => {
+              prefetchStore();
             }}
+            onClick={() => {
+              navigate(`/store?email=${storeData.email}`);
+            }}
+            on
           />
         </div>
       </div>

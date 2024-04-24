@@ -2,7 +2,7 @@ import React from "react";
 import Button from "../Shared/Button";
 import { useNavigate } from "react-router-dom";
 
-const ProductCard = ({ data, noFadeUp, aosDelay }) => {
+const ProductCard = ({ data, noFadeUp, aosDelay, email }) => {
   const navigate = useNavigate();
   return (
     <div
@@ -13,7 +13,7 @@ const ProductCard = ({ data, noFadeUp, aosDelay }) => {
     >
       <div className="relative">
         <img
-          src={data.img}
+          src={data.cartPrimaryImage}
           alt=""
           className="h-[180px] w-[260px] object-cover rounded-md"
         />
@@ -23,13 +23,13 @@ const ProductCard = ({ data, noFadeUp, aosDelay }) => {
             text={"Buy Now"}
             bgColor={"bg-primary"}
             textColor={"text-white"}
-            onClick={() => navigate("/product/:" + data.id)}
+            onClick={() => navigate(`/product/${data._id}?email=${email}`)}
           />
         </div>
       </div>
       <div className="leading-7">
-        <h2 className="font-semibold">{data.title}</h2>
-        <h2 className="font-bold">${data.price}</h2>
+        <h2 className="font-semibold">{data.cartName}</h2>
+        <h2 className="font-bold">${data.cartPrice}</h2>
       </div>
     </div>
   );

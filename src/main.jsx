@@ -7,11 +7,14 @@ import { Provider as ProviderRedux } from "react-redux";
 import Store from "./Stores/Store.js";
 import { RouterProvider } from "react-router-dom";
 import router from "./Routes/index.jsx";
+import { SnackbarProvider } from "notistack";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <ProviderRedux store={Store}>
-      <RouterProvider router={router} />
-    </ProviderRedux>
+    <SnackbarProvider>
+      <ProviderRedux store={Store}>
+        <RouterProvider router={router} />
+      </ProviderRedux>
+    </SnackbarProvider>
   </React.StrictMode>,
 );

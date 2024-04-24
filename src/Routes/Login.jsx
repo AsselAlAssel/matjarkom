@@ -16,6 +16,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import useLoginUser from "../hooks/useUser";
 import { useDispatch } from "react-redux";
 import { saveUserData } from "../Stores/project/auth";
+import { useLoginMerchant } from "../hooks/useMerchant";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -24,8 +25,21 @@ export default function Login() {
   const redirect = searchParams.get("redirect");
   console.log(redirect);
   const { login, data, error, isLoading } = useLoginUser();
+  const {
+    login: loginMerchant,
+    data: dataMerchant,
+    error: errorMerchant,
+    isLoading: isLoadingMerchant,
+  } = useLoginMerchant();
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (event.target.isMarchant.checked) {
+      await loginMerchant({
+        email: event.target.email.value,
+        password: event.target.password.value,
+      });
+      return;
+    }
     await login({
       email: event.target.email.value,
       password: event.target.password.value,
@@ -34,8 +48,13 @@ export default function Login() {
 
   if (data) {
     localStorage.setItem("token", data.data.token);
-    dispatch(saveUserData(data.data));
+    dispatch(saveUserData({ ...data.data, isMarchant: false }));
     navigate(redirect ? redirect : "/");
+  }
+  if (dataMerchant) {
+    localStorage.setItem("token", dataMerchant.data.token);
+    dispatch(saveUserData({ ...dataMerchant.data, isMarchant: true }));
+    navigate("/store");
   }
   return (
     <div className="container">
@@ -89,7 +108,8 @@ export default function Login() {
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+              label="Login As Marchant"
+              name="isMarchant"
             />
             <Button
               type="submit"

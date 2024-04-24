@@ -65,18 +65,22 @@ export default function SideBar({ openDrawer, setOpenDrawer }) {
           >
             <Stack direction={"row"} spacing={2}>
               <Box>
-                <img src={order.image} alt={order.name} className="w-20 h-20" />
+                <img
+                  src={order.cartPrimaryImage}
+                  alt={order.cartName}
+                  className="w-20 h-20"
+                />
               </Box>
               <Box>
-                <h3 className="text-lg font-semibold">{order.name}</h3>
+                <h3 className="text-lg font-semibold">{order.cartName}</h3>
                 <p className="text-sm">Qty: {order.qty}</p>
-                <p className="text-sm">Price: ${order.price}</p>
+                <p className="text-sm">Price: ${order.cartPrice}</p>
               </Box>
             </Stack>
             <Box>
               <IoMdClose
                 className="text-2xl cursor-pointer"
-                onClick={() => dispatch(removeOrder(order.id))}
+                onClick={() => dispatch(removeOrder(order._id))}
               />
               <IoMdAdd
                 className="text-2xl cursor-pointer"

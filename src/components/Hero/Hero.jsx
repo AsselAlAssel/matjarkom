@@ -9,6 +9,8 @@ import { Menu, MenuItem } from "@mui/material";
 import usePopoverState from "../../hooks/usePopoverState";
 import HeroPlaceHolder from "./HeroPlaceHolder";
 import DeleteDialog from "../DeleteDialog/DeleteDialog";
+import { useSelector } from "react-redux";
+import { selectIsMerchant } from "../../Stores/project/auth";
 
 const HeroData = [
   {
@@ -31,7 +33,7 @@ const HeroData = [
   },
 ];
 
-const Hero = () => {
+const Hero = ({ images }) => {
   const settings = {
     dots: true,
     arrows: false,
@@ -45,6 +47,8 @@ const Hero = () => {
   const [selectedHero, setSelectedHero] = useState(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [openMenu, anchorEl, handleOpen, handleClose] = usePopoverState();
+  const isMerchant = useSelector(selectIsMerchant);
+
   return (
     <div className="container">
       <div
@@ -54,54 +58,49 @@ const Hero = () => {
         <div className="container pb-8 sm:pb-0">
           {/* Hero section */}
           <Slider {...settings}>
-            {HeroData.map((data) => (
-              <div key={data.id} className="relative">
-                <ActionsIconButton
-                  sx={{ position: "absolute", right: 0, top: 0, zIndex: 1000 }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedHero(data);
-                    handleOpen(e);
-                  }}
-                />
-                <div className="grid grid-cols-1 sm:grid-cols-2">
-                  {/* text content section */}
-                  <div className="flex flex-col justify-center gap-4 sm:pl-3 pt-12 sm:pt-0 text-center sm:text-left order-2 sm:order-1 relative z-10 ">
-                    <h1
-                      data-aos="zoom-out"
-                      data-aos-duration="500"
-                      data-aos-once="true"
-                      className="text-5xl sm:text-6xl lg:text-7xl font-bold"
-                    >
-                      {data.title}
-                    </h1>
-                    <h1
-                      data-aos="zoom-out"
-                      data-aos-duration="500"
-                      data-aos-once="true"
-                      className="text-5xl uppercase text-white dark:text-white/5 sm:text-[80px] md:text-[100px] xl:text-[150px] font-bold"
-                    >
-                      {data.title2}
-                    </h1>
-                  </div>
-                  {/* Img section */}
-                  <div className="order-1 sm:order-2">
+            {images?.map((url) => (
+              <div key={url} className="relative">
+                {isMerchant ? (
+                  <ActionsIconButton
+                    sx={{
+                      position: "absolute",
+                      right: 0,
+                      top: 0,
+                      zIndex: 1000,
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedHero(data);
+                      handleOpen(e);
+                    }}
+                  />
+                ) : null}
+                <div>
+                  <div
+                    style={
+                      {
+                        // backgroundColor: "red",
+                      }
+                    }
+                  >
                     <div
                       data-aos="zoom-in"
                       data-aos-once="true"
                       className="relative z-10"
                     >
                       <img
-                        src={data.img}
+                        src={url}
                         alt=""
-                        className="w-[300px] sm:w-[450px] h-[300px] sm:h-[450px] sm:scale-105 lg:scale-120 object-contain mx-auto drop-shadow-[-8px_4px_6px_rgba(0,0,0,.4)] relative z-40"
+                        className="w-full sm:w-[450px] h-[300px] sm:h-[450px] sm:scale-105 lg:scale-120 object-fit mx-auto drop-shadow-[-8px_4px_6px_rgba(0,0,0,.4)] relative z-40"
                       />
                     </div>
                   </div>
                 </div>
               </div>
             ))}
-            <HeroPlaceHolder openForm={() => setOpen(true)} />
+            {isMerchant ? (
+              <HeroPlaceHolder openForm={() => setOpen(true)} />
+            ) : null}
           </Slider>
         </div>
       </div>

@@ -5,31 +5,36 @@ import usePopoverState from "../../hooks/usePopoverState";
 import { Menu, MenuItem } from "@mui/material";
 import CategoryForm from "../CategoryForm/CategoryForm";
 import DeleteDialog from "../DeleteDialog/DeleteDialog";
+import { useSelector } from "react-redux";
+import { selectIsMerchant } from "../../Stores/project/auth";
 
-const Categories = () => {
-  const [categories, setCategories] = useState([1, 2, 3, 4]);
-  const [openCategoryForm, setOpenCategoryForm] = React.useState(false);
-  const [selectedCategory, setSelectedCategory] = React.useState(null);
-  const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
+const Categories = ({ categories }) => {
+  const [openCategoryForm, setOpenCategoryForm] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [open, anchorEl, handleOpen, handleClose] = usePopoverState();
+  const isMerchant = useSelector(selectIsMerchant);
+
   return (
     <div className="py-8">
       <div className="container">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 lg:px-10 gap-8">
-          {categories.map((category) => (
+          {categories?.map((categoryName) => (
             <CategoryCard
-              key={category}
+              key={categoryName}
               setSelectedCategory={setSelectedCategory}
-              openCategoryForm={openCategoryForm}
               handleOpen={handleOpen}
+              categoryName={categoryName}
             />
           ))}
-          <CategoryPlaceHolder
-            onClickOnAddCategory={() => {
-              setSelectedCategory(null);
-              setOpenCategoryForm(true);
-            }}
-          />
+          {isMerchant ? (
+            <CategoryPlaceHolder
+              onClickOnAddCategory={() => {
+                setSelectedCategory(null);
+                setOpenCategoryForm(true);
+              }}
+            />
+          ) : null}
         </div>
       </div>
       <CategoryForm

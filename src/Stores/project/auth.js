@@ -3,7 +3,7 @@ const initialState = {
   user: {
     email: "",
     token: "",
-    type: "user",
+    isMerchant: false,
   },
 };
 
@@ -23,5 +23,7 @@ const authSlice = createSlice({
 export const { saveUserData, logout } = authSlice.actions;
 
 export const selectUser = (state) => state.auth.user;
+export const selectToken = (state) => state.auth.user.token;
+export const selectIsMerchant = (state) => state.auth.user.isMerchant;
 
 export default authSlice.reducer;

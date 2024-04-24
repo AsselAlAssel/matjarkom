@@ -11,6 +11,8 @@ import ActionsIconButton from "../ActionsIconButton/ActionsIconButton";
 import usePopoverState from "../../hooks/usePopoverState";
 import { Menu, MenuItem } from "@mui/material";
 import DeleteDialog from "../DeleteDialog/DeleteDialog";
+import { useSelector } from "react-redux";
+import { selectIsMerchant } from "../../Stores/project/auth";
 
 const BlogData = [
   {
@@ -43,6 +45,7 @@ const Blogs = () => {
   const [selectedBlog, setSelectedBlog] = useState(null);
   const [openMenu, anchorEl, handleOpen, handleClose] = usePopoverState();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const isMerchant = useSelector(selectIsMerchant);
 
   return (
     <div className="my-12">
@@ -61,18 +64,20 @@ const Blogs = () => {
               className="bg-white dark:bg-gray-900 cursor-pointer relative"
               onClick={() => window.open(data.link, "_blank")}
             >
-              <ActionsIconButton
-                sx={{
-                  position: "absolute",
-                  right: 4,
-                  top: 4,
-                }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setSelectedBlog(data);
-                  handleOpen(e);
-                }}
-              />
+              {isMerchant ? (
+                <ActionsIconButton
+                  sx={{
+                    position: "absolute",
+                    right: 4,
+                    top: 4,
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedBlog(data);
+                    handleOpen(e);
+                  }}
+                />
+              ) : null}
               {/* image section */}
               <div className="overflow-hidden rounded-2xl mb-2">
                 <img
@@ -92,14 +97,16 @@ const Blogs = () => {
               </div>
             </div>
           ))}
-          <div data-aos="fade-up" data-aos-delay={200}>
-            <BlogPlaceHolder
-              onClickAddBlog={() => {
-                setOpen(true);
-                setSelectedBlog(null);
-              }}
-            />
-          </div>
+          {isMerchant ? (
+            <div data-aos="fade-up" data-aos-delay={200}>
+              <BlogPlaceHolder
+                onClickAddBlog={() => {
+                  setOpen(true);
+                  setSelectedBlog(null);
+                }}
+              />
+            </div>
+          ) : null}
         </div>
       </div>
       <BlogForm

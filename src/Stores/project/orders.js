@@ -1,15 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  orders: [
-    {
-      id: 1,
-      name: "headphone",
-      price: 120,
-      image: "https://picsum.photos/200/300",
-      qty: 1,
-    },
-  ],
+  orders: [],
 };
 
 const orderSlice = createSlice({
@@ -17,16 +9,29 @@ const orderSlice = createSlice({
   initialState,
   reducers: {
     addOrder: (state, action) => {
-      state.orders.push(action.payload);
+      const existingOrder = state.orders.find(
+        (order) => order._id === action.payload._id,
+      );
+      if (existingOrder) {
+        const index = state.orders.findIndex(
+          (order) => order._id === action.payload._id,
+        );
+        state.orders[index] = {
+          ...state.orders[index],
+          qty: state.orders[index].qty + 1,
+        };
+      } else {
+        state.orders.push(action.payload);
+      }
     },
     removeOrder: (state, action) => {
       state.orders = state.orders.filter(
-        (order) => order.id !== action.payload,
+        (order) => order._id !== action.payload,
       );
     },
     updateOrder: (state, action) => {
       state.orders = state.orders.map((order) =>
-        order.id === action.payload.id ? action.payload : order,
+        order.id === action.payload._id ? action.payload : order,
       );
     },
   },

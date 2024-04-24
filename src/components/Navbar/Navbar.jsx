@@ -38,7 +38,7 @@ const Navbar = ({ hideCart, links, logo, logoLink, hideSignIn }) => {
             <Link
               to={logoLink ? logoLink : "/"}
               className="text-primary font-semibold tracking-widest text-2xl uppercase sm:text-3xl
-"
+              w-[150px] truncate"
             >
               {logo ? logo : "LOGO here"}
             </Link>
@@ -81,7 +81,7 @@ const Navbar = ({ hideCart, links, logo, logoLink, hideSignIn }) => {
               >
                 <FaCartShopping className="text-xl text-gray-600 dark:text-gray-400" />
                 <div className="w-4 h-4 bg-red-500 text-white rounded-full absolute top-0 right-0 flex items-center justify-center text-xs">
-                  {orders.length}
+                  {orders.reduce((acc, order) => acc + order.qty, 0)}
                 </div>
               </button>
             )}
