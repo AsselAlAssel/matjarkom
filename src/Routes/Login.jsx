@@ -33,7 +33,7 @@ export default function Login() {
   } = useLoginMerchant();
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (event.target.isMarchant.checked) {
+    if (event.target.isMerchant.checked) {
       await loginMerchant({
         email: event.target.email.value,
         password: event.target.password.value,
@@ -48,13 +48,13 @@ export default function Login() {
 
   if (data) {
     localStorage.setItem("token", data.data.token);
-    dispatch(saveUserData({ ...data.data, isMarchant: false }));
+    dispatch(saveUserData({ ...data.data, isMerchant: false }));
     navigate(redirect ? redirect : "/");
   }
   if (dataMerchant) {
     localStorage.setItem("token", dataMerchant.data.token);
-    dispatch(saveUserData({ ...dataMerchant.data, isMarchant: true }));
-    navigate("/store");
+    dispatch(saveUserData({ ...dataMerchant.data, isMerchant: true }));
+    navigate(`/store?email=${dataMerchant.data.email}`);
   }
   return (
     <div className="container">
@@ -109,7 +109,7 @@ export default function Login() {
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Login As Marchant"
-              name="isMarchant"
+              name="isMerchant"
             />
             <Button
               type="submit"

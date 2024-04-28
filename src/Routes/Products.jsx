@@ -10,6 +10,8 @@ import { Autocomplete, Stack, TextField, Typography } from "@mui/material";
 import { StoreCategories } from "./Stores";
 import { useStoreProducts } from "../hooks/useMerchant";
 import { useLocation } from "react-router-dom";
+import { selectUser } from "../Stores/project/auth";
+import { useSelector } from "react-redux";
 
 const ProductsData = [
   {
@@ -42,7 +44,8 @@ export default function Products() {
   const location = useLocation();
   const [category, setCategory] = React.useState();
   const email = new URLSearchParams(location.search).get("email");
-  const { data } = useStoreProducts(email);
+  const user = useSelector(selectUser);
+  const isOwner = user?.email === email && user?.isMerchant; const { data } = useStoreProducts(email);
   const profile = data?.data;
   const products = data?.data?.type;
   const filteredProducts = useMemo(() => {

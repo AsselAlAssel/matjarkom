@@ -10,7 +10,6 @@ import useStores from "../hooks/useStores";
 
 export default function Home() {
   const { data, error, isLoading, mutate } = useStores();
-  console.log(data);
   const navigate = useNavigate();
   return (
     <div className="container">

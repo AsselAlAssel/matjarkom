@@ -10,7 +10,8 @@ import usePopoverState from "../../hooks/usePopoverState";
 import HeroPlaceHolder from "./HeroPlaceHolder";
 import DeleteDialog from "../DeleteDialog/DeleteDialog";
 import { useSelector } from "react-redux";
-import { selectIsMerchant } from "../../Stores/project/auth";
+import { selectUser } from "../../Stores/project/auth";
+import { useLocation } from "react-router-dom";
 
 const HeroData = [
   {
@@ -47,8 +48,10 @@ const Hero = ({ images }) => {
   const [selectedHero, setSelectedHero] = useState(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [openMenu, anchorEl, handleOpen, handleClose] = usePopoverState();
-  const isMerchant = useSelector(selectIsMerchant);
-
+  const location = useLocation();
+  const email = new URLSearchParams(location.search).get("email");
+  const user = useSelector(selectUser);
+  const isOwner = user?.email === email && user?.isMerchant;
   return (
     <div className="container">
       <div
@@ -60,7 +63,7 @@ const Hero = ({ images }) => {
           <Slider {...settings}>
             {images?.map((url) => (
               <div key={url} className="relative">
-                {isMerchant ? (
+                {isOwner ? (
                   <ActionsIconButton
                     sx={{
                       position: "absolute",
@@ -98,7 +101,7 @@ const Hero = ({ images }) => {
                 </div>
               </div>
             ))}
-            {isMerchant ? (
+            {isOwner ? (
               <HeroPlaceHolder openForm={() => setOpen(true)} />
             ) : null}
           </Slider>

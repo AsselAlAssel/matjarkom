@@ -12,7 +12,8 @@ import usePopoverState from "../../hooks/usePopoverState";
 import { Menu, MenuItem } from "@mui/material";
 import DeleteDialog from "../DeleteDialog/DeleteDialog";
 import { useSelector } from "react-redux";
-import { selectIsMerchant } from "../../Stores/project/auth";
+import { selectUser } from "../../Stores/project/auth";
+import { useLocation } from "react-router-dom";
 
 const BlogData = [
   {
@@ -45,8 +46,10 @@ const Blogs = () => {
   const [selectedBlog, setSelectedBlog] = useState(null);
   const [openMenu, anchorEl, handleOpen, handleClose] = usePopoverState();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const isMerchant = useSelector(selectIsMerchant);
-
+  const location = useLocation();
+  const email = new URLSearchParams(location.search).get("email");
+  const user = useSelector(selectUser);
+  const isOwner = user?.email === email && user?.isMerchant;
   return (
     <div className="my-12">
       <div className="container">
@@ -64,7 +67,7 @@ const Blogs = () => {
               className="bg-white dark:bg-gray-900 cursor-pointer relative"
               onClick={() => window.open(data.link, "_blank")}
             >
-              {isMerchant ? (
+              {isOwner ? (
                 <ActionsIconButton
                   sx={{
                     position: "absolute",
@@ -97,7 +100,7 @@ const Blogs = () => {
               </div>
             </div>
           ))}
-          {isMerchant ? (
+          {isOwner ? (
             <div data-aos="fade-up" data-aos-delay={200}>
               <BlogPlaceHolder
                 onClickAddBlog={() => {

@@ -3,11 +3,14 @@ import Button from "../Shared/Button";
 import Box from "@mui/material/Box";
 import ActionsIconButton from "../ActionsIconButton/ActionsIconButton";
 import { useSelector } from "react-redux";
-import { selectIsMerchant } from "../../Stores/project/auth";
+import { selectUser } from "../../Stores/project/auth";
+import { useLocation } from "react-router-dom";
 
 const CategoryCard = ({ setSelectedCategory, handleOpen, categoryName }) => {
-  const isMerchant = useSelector(selectIsMerchant);
-
+  const location = useLocation();
+  const email = new URLSearchParams(location.search).get("email");
+  const user = useSelector(selectUser);
+  const isOwner = user?.email === email && user?.isMerchant;
   return (
     <Box
       className="py-10 pl-5 text-white rounded-3xl relative h-[320px] flex items-end"
@@ -16,7 +19,7 @@ const CategoryCard = ({ setSelectedCategory, handleOpen, categoryName }) => {
         background: `linear-gradient(rgba(0, 0, 0, 0) -34.58%, rgb(0, 0, 0) 56.09%), url() center center / cover no-repeat, 50% center / cover no-repeat lightgray`,
       }}
     >
-      {isMerchant ? (
+      {isOwner ? (
         <ActionsIconButton
           sx={{
             position: "absolute",
@@ -24,12 +27,7 @@ const CategoryCard = ({ setSelectedCategory, handleOpen, categoryName }) => {
             right: "10px",
           }}
           onClick={(e) => {
-            setSelectedCategory({
-              id: 1,
-              name: "Headphone",
-              description:
-                "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-            });
+            setSelectedCategory(categoryName);
             handleOpen(e);
           }}
         />

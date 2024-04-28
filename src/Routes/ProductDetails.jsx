@@ -8,19 +8,27 @@ import MatjarkomField from "../components/MatjarkomField/MatjarkomField";
 import { digitsOnly } from "../utils/constant";
 import { useDispatch, useSelector } from "react-redux";
 import { addOrder } from "../Stores/project/orders";
-import { selectIsMerchant } from "../Stores/project/auth";
-import { useStoreProducts } from "../hooks/useMerchant";
+import { selectUser } from "../Stores/project/auth";
+import { useStoreProducts, useUpdateProductMutation } from "../hooks/useMerchant";
 
 export default function ProductDetails() {
   const { id } = useParams();
   const location = useLocation();
-  const email = new URLSearchParams(location.search).get("email");
   const dispatch = useDispatch();
-  const isMerchant = useSelector(selectIsMerchant);
+  const email = new URLSearchParams(location.search).get("email");
+  const user = useSelector(selectUser);
+  const isOwner = user?.email === email && user?.isMerchant;
   const { data } = useStoreProducts(email);
   const profile = data?.data;
   const products = data?.data?.type;
   const product = products?.find((product) => product._id === id);
+  const index = products?.findIndex((product) => product._id === id);
+  const {
+    trigger: updateProduct,
+    isMutating: isUpdating,
+  } = useUpdateProductMutation(email);
+
+
 
   return (
     <div className="container">
@@ -68,7 +76,7 @@ export default function ProductDetails() {
                   },
                 }}
                 InputProps={{
-                  readOnly: !isMerchant,
+                  readOnly: !isOwner,
                   disableUnderline: true,
                   sx: {
                     fontSize: "24px",
@@ -79,6 +87,15 @@ export default function ProductDetails() {
                     textWrap: "wrap",
                   },
                 }}
+                onBlur={(e) => {
+                  updateProduct({
+                    ...product,
+                    cartName: e.target.value,
+                    index,
+                  });
+                }
+                }
+
               />
               <MatjarkomField
                 variant="standard"
@@ -95,7 +112,7 @@ export default function ProductDetails() {
                   },
                 }}
                 InputProps={{
-                  readOnly: !isMerchant,
+                  readOnly: !isOwner,
                   disableUnderline: true,
                   sx: {
                     fontSize: "30px",
@@ -130,7 +147,7 @@ export default function ProductDetails() {
                   },
                 }}
                 InputProps={{
-                  readOnly: !isMerchant,
+                  readOnly: !isOwner,
                   disableUnderline: true,
                   sx: {
                     fontSize: "16px",

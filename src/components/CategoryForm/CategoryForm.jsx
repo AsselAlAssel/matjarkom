@@ -14,23 +14,19 @@ import { useForm, Controller } from "react-hook-form";
 import MatjarkomField from "../MatjarkomField/MatjarkomField";
 
 const defaultValues = {
-  name: "",
-  description: "",
-  image: "",
+  specificStoreCategories: ""
 };
 
-const CategoryForm = ({ open, handleClose, selectedCategory }) => {
+const CategoryForm = ({ open, handleClose, selectedCategory, onSubmit, isSubmitting }) => {
   const { control, handleSubmit, reset, getValues } = useForm({
     defaultValues: selectedCategory
-      ? { ...selectedCategory, image: "" }
+      ? { specificStoreCategories: selectedCategory }
       : defaultValues,
   });
   useEffect(() => {
     if (selectedCategory) {
       reset({
-        name: selectedCategory.name,
-        description: selectedCategory.description,
-        image: "",
+        specificStoreCategories: selectedCategory,
       });
     }
   }, [selectedCategory]);
@@ -79,44 +75,17 @@ const CategoryForm = ({ open, handleClose, selectedCategory }) => {
             }}
           >
             <Controller
-              name="image"
+              name="specificStoreCategories"
               control={control}
-              render={({ field }) => (
-                <MatjarkomField
-                  {...field}
-                  label="Category Image"
-                  variant="outlined"
-                  fullWidth
-                  type="file"
-                />
-              )}
-            />
-            <Controller
-              name="name"
-              control={control}
-              rules={{ required: "Category Name is required" }}
+              rules={{ required: "Category is required" }}
               render={({ field, fieldState: { error } }) => (
                 <MatjarkomField
                   {...field}
-                  label="Category Name"
+                  label="Category"
                   variant="outlined"
                   fullWidth
                   error={!!error}
                   helperText={error ? error.message : null}
-                />
-              )}
-            />
-            <Controller
-              name="description"
-              control={control}
-              render={({ field }) => (
-                <MatjarkomField
-                  {...field}
-                  label="Description"
-                  variant="outlined"
-                  fullWidth
-                  multiline
-                  rows={4}
                 />
               )}
             />
@@ -150,9 +119,10 @@ const CategoryForm = ({ open, handleClose, selectedCategory }) => {
             className="dark:bg-violet-500 dark:hover:bg-violet-600"
             fullWidth
             onClick={handleSubmit((data) => {
-              console.log(data);
+              onSubmit(data);
               reset(defaultValues);
             })}
+            disabled={isSubmitting}
           >
             Save
           </Button>

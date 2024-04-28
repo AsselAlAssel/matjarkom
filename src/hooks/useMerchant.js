@@ -60,3 +60,51 @@ export const useStoreProducts = (email) => {
   );
   return { data, error, isLoading, mutate };
 };
+// cartName, cartPrice, cartDiscount, cartLiked, cartFavourite, cartDescription, cartCategory, cartQuantities, index, cartRate
+const updateProduct = async (key, { arg }) => {
+  return axiosClient.put(key, {
+    cartName: arg.cartName,
+    cartPrice: arg.cartPrice,
+    cartDiscount: arg.cartDiscount,
+    cartLiked: arg.cartLiked,
+    cartFavourite: arg.cartFavourite,
+    cartDescription: arg.cartDescription,
+    cartCategory: arg.cartCategory,
+    cartQuantities: arg.cartQuantities,
+    index: arg.index,
+    cartRate: arg.cartRate,
+  });
+};
+
+export const useUpdateProductMutation = (email) => {
+  const { trigger, isMutating, error } = useSWRMutation(`test-update-specific-cart/${email}`, updateProduct)
+  return { trigger, isMutating, error }
+}
+const createCategory = async (key, { arg }) => {
+  return axiosClient.post(key, arg);
+}
+
+export const useCreateCategory = (email) => {
+  const { trigger, isMutating, error } = useSWRMutation(`specific-store-categories/${email}`, createCategory)
+  return { trigger, isMutating, error }
+}
+
+const deleteCategory = async (key, { arg }) => {
+  console.log(key, arg);
+  return axiosClient.delete(key, arg);
+}
+
+export const useDeleteCategory = (email) => {
+  const { trigger, isMutating, error } = useSWRMutation(`delete-category-connected-to-cart/${email}`, deleteCategory)
+  return { trigger, isMutating, error }
+}
+
+const updateCategory = async (key, { arg }) => {
+  console.log(key, arg);
+  return axiosClient.patch(key, arg);
+}
+
+export const useUpdateCategory = (email) => {
+  const { trigger, isMutating, error } = useSWRMutation(`update-specific-store-categories/${email}`, updateCategory)
+  return { trigger, isMutating, error }
+}

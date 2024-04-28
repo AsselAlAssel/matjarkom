@@ -13,8 +13,8 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { useStoreProducts, useStoreProfile } from "../hooks/useMerchant.js";
 import { useLocation } from "react-router-dom";
-import { selectIsMerchant } from "../Stores/project/auth.js";
 import { useSelector } from "react-redux";
+import { selectUser } from "../Stores/project/auth.js";
 
 const BannerData = {
   discount: "30% OFF",
@@ -31,8 +31,8 @@ const Home = () => {
   const [orderPopup, setOrderPopup] = React.useState(false);
   const location = useLocation();
   const email = new URLSearchParams(location.search).get("email");
-  console.log(email);
-  const handleOrderPopup = () => {
+  const user = useSelector(selectUser);
+  const isOwner = user?.email === email && user?.isMerchant; const handleOrderPopup = () => {
     setOrderPopup(!orderPopup);
   };
 
@@ -47,16 +47,15 @@ const Home = () => {
   }, []);
   const { data } = useStoreProfile(email);
   const { data: productsData } = useStoreProducts(email);
-  const isMerchant = useSelector(selectIsMerchant);
   const profile = productsData?.data;
   const products = productsData?.data.type;
   return (
     <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 overflow-hidden">
       <Navbar logo={profile?.storeName} logoLink={`/store?email=${email}`} />
-      {!isMerchant && profile?.storeSliderImages?.length === 0 ? null : (
+      {!user.isMerchant && profile?.storeSliderImages?.length === 0 ? null : (
         <Hero images={profile?.storeSliderImages} />
       )}
-      {!isMerchant && profile?.specificStoreCategories?.length === 0 ? null : (
+      {!user.isMerchant && profile?.specificStoreCategories?.length === 0 ? null : (
         <Categories categories={profile?.specificStoreCategories} />
       )}
       <Services />

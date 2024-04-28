@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import CategoryCard from "../CategoryCard/CategoryCard";
 import CategoryPlaceHolder from "../CategoryPlaceHolder/CategoryPlaceHolder";
 import usePopoverState from "../../hooks/usePopoverState";
@@ -6,15 +6,37 @@ import { Menu, MenuItem } from "@mui/material";
 import CategoryForm from "../CategoryForm/CategoryForm";
 import DeleteDialog from "../DeleteDialog/DeleteDialog";
 import { useSelector } from "react-redux";
-import { selectIsMerchant } from "../../Stores/project/auth";
+import { selectUser } from "../../Stores/project/auth";
+import { useLocation } from "react-router-dom";
+import { useCreateCategory, useDeleteCategory, useUpdateCategory } from "../../hooks/useMerchant";
+import { mutate } from "swr";
 
 const Categories = ({ categories }) => {
   const [openCategoryForm, setOpenCategoryForm] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [open, anchorEl, handleOpen, handleClose] = usePopoverState();
-  const isMerchant = useSelector(selectIsMerchant);
+  const location = useLocation();
+  const email = new URLSearchParams(location.search).get("email");
+  const user = useSelector(selectUser);
+  const isOwner = user?.email === email && user?.isMerchant;
+  const index = useMemo(() => {
+    return categories.indexOf(selectedCategory)
+  }
+    , [selectedCategory, categories]);
 
+  const {
+    trigger: createCategory,
+    isMutating,
+  } = useCreateCategory(email);
+  const {
+    trigger: deleteCategory,
+    isMutating: isDeleting,
+  } = useDeleteCategory(email);
+  const {
+    trigger: updateCategory,
+    isMutating: isUpdating,
+  } = useUpdateCategory(email);
   return (
     <div className="py-8">
       <div className="container">
@@ -27,7 +49,7 @@ const Categories = ({ categories }) => {
               categoryName={categoryName}
             />
           ))}
-          {isMerchant ? (
+          {isOwner ? (
             <CategoryPlaceHolder
               onClickOnAddCategory={() => {
                 setSelectedCategory(null);
@@ -44,6 +66,25 @@ const Categories = ({ categories }) => {
           setSelectedCategory(null);
         }}
         selectedCategory={selectedCategory}
+        onSubmit={async (data) => {
+          if (selectedCategory) {
+            // update category
+            await updateCategory({
+              index,
+              specificCategoryName: data.specificStoreCategories,
+              email,
+            });
+            setSelectedCategory(null);
+            setOpenCategoryForm(false);
+            mutate(`test-get-merchant-cart/${email}`);
+            return;
+          }
+          await createCategory(data);
+          setOpenCategoryForm(false);
+          mutate(`test-get-merchant-cart/${email}`);
+        }
+        }
+        isSubmitting={isMutating || isUpdating}
       />
       <Menu open={open} anchorEl={anchorEl} onClose={handleClose}>
         <MenuItem
@@ -68,7 +109,11 @@ const Categories = ({ categories }) => {
         handleDeleteDialogClose={() => {
           setDeleteDialogOpen(false);
         }}
-        handleDelete={() => {
+        handleDelete={async () => {
+          await deleteCategory({
+            index,
+          });
+          mutate(`test-get-merchant-cart/${email}`);
           setDeleteDialogOpen(false);
         }}
         title={"Delete Category"}
