@@ -14,10 +14,16 @@ import { useForm, Controller } from "react-hook-form";
 import MatjarkomField from "../MatjarkomField/MatjarkomField";
 
 const defaultValues = {
-  specificStoreCategories: ""
+  specificStoreCategories: "",
 };
 
-const CategoryForm = ({ open, handleClose, selectedCategory, onSubmit, isSubmitting }) => {
+const CategoryForm = ({
+  open,
+  handleClose,
+  selectedCategory,
+  onSubmit,
+  isSubmitting,
+}) => {
   const { control, handleSubmit, reset, getValues } = useForm({
     defaultValues: selectedCategory
       ? { specificStoreCategories: selectedCategory }

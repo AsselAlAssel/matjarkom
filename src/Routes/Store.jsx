@@ -32,7 +32,8 @@ const Home = () => {
   const location = useLocation();
   const email = new URLSearchParams(location.search).get("email");
   const user = useSelector(selectUser);
-  const isOwner = user?.email === email && user?.isMerchant; const handleOrderPopup = () => {
+  const isOwner = user?.email === email && user?.isMerchant;
+  const handleOrderPopup = () => {
     setOrderPopup(!orderPopup);
   };
 
@@ -55,7 +56,8 @@ const Home = () => {
       {!user.isMerchant && profile?.storeSliderImages?.length === 0 ? null : (
         <Hero images={profile?.storeSliderImages} />
       )}
-      {!user.isMerchant && profile?.specificStoreCategories?.length === 0 ? null : (
+      {!user.isMerchant &&
+      profile?.specificStoreCategories?.length === 0 ? null : (
         <Categories categories={profile?.specificStoreCategories} />
       )}
       <Services />

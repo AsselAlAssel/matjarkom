@@ -9,7 +9,10 @@ import { digitsOnly } from "../utils/constant";
 import { useDispatch, useSelector } from "react-redux";
 import { addOrder } from "../Stores/project/orders";
 import { selectUser } from "../Stores/project/auth";
-import { useStoreProducts, useUpdateProductMutation } from "../hooks/useMerchant";
+import {
+  useStoreProducts,
+  useUpdateProductMutation,
+} from "../hooks/useMerchant";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -23,12 +26,8 @@ export default function ProductDetails() {
   const products = data?.data?.type;
   const product = products?.find((product) => product._id === id);
   const index = products?.findIndex((product) => product._id === id);
-  const {
-    trigger: updateProduct,
-    isMutating: isUpdating,
-  } = useUpdateProductMutation(email);
-
-
+  const { trigger: updateProduct, isMutating: isUpdating } =
+    useUpdateProductMutation(email);
 
   return (
     <div className="container">
@@ -93,9 +92,7 @@ export default function ProductDetails() {
                     cartName: e.target.value,
                     index,
                   });
-                }
-                }
-
+                }}
               />
               <MatjarkomField
                 variant="standard"

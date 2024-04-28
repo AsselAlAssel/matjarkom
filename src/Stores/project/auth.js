@@ -27,5 +27,4 @@ export const selectToken = (state) => state.auth.user.token;
 export const selectIsMerchant = (state) => state.auth.user.isMerchant;
 export const selectEmail = (state) => state.auth.user.email;
 
-
 export default authSlice.reducer;

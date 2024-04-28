@@ -8,7 +8,11 @@ import DeleteDialog from "../DeleteDialog/DeleteDialog";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../Stores/project/auth";
 import { useLocation } from "react-router-dom";
-import { useCreateCategory, useDeleteCategory, useUpdateCategory } from "../../hooks/useMerchant";
+import {
+  useCreateCategory,
+  useDeleteCategory,
+  useUpdateCategory,
+} from "../../hooks/useMerchant";
 import { mutate } from "swr";
 
 const Categories = ({ categories }) => {
@@ -21,22 +25,14 @@ const Categories = ({ categories }) => {
   const user = useSelector(selectUser);
   const isOwner = user?.email === email && user?.isMerchant;
   const index = useMemo(() => {
-    return categories.indexOf(selectedCategory)
-  }
-    , [selectedCategory, categories]);
+    return categories.indexOf(selectedCategory);
+  }, [selectedCategory, categories]);
 
-  const {
-    trigger: createCategory,
-    isMutating,
-  } = useCreateCategory(email);
-  const {
-    trigger: deleteCategory,
-    isMutating: isDeleting,
-  } = useDeleteCategory(email);
-  const {
-    trigger: updateCategory,
-    isMutating: isUpdating,
-  } = useUpdateCategory(email);
+  const { trigger: createCategory, isMutating } = useCreateCategory(email);
+  const { trigger: deleteCategory, isMutating: isDeleting } =
+    useDeleteCategory(email);
+  const { trigger: updateCategory, isMutating: isUpdating } =
+    useUpdateCategory(email);
   return (
     <div className="py-8">
       <div className="container">
@@ -82,8 +78,7 @@ const Categories = ({ categories }) => {
           await createCategory(data);
           setOpenCategoryForm(false);
           mutate(`test-get-merchant-cart/${email}`);
-        }
-        }
+        }}
         isSubmitting={isMutating || isUpdating}
       />
       <Menu open={open} anchorEl={anchorEl} onClose={handleClose}>

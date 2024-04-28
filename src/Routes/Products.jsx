@@ -45,7 +45,8 @@ export default function Products() {
   const [category, setCategory] = React.useState();
   const email = new URLSearchParams(location.search).get("email");
   const user = useSelector(selectUser);
-  const isOwner = user?.email === email && user?.isMerchant; const { data } = useStoreProducts(email);
+  const isOwner = user?.email === email && user?.isMerchant;
+  const { data } = useStoreProducts(email);
   const profile = data?.data;
   const products = data?.data?.type;
   const filteredProducts = useMemo(() => {

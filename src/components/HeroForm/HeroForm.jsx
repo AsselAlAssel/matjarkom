@@ -9,8 +9,8 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React, { useState } from 'react';
-import { useDropzone } from 'react-dropzone';
+import React, { useState } from "react";
+import { useDropzone } from "react-dropzone";
 import { IoCloseSharp } from "react-icons/io5";
 import MatjarkomField from "../MatjarkomField/MatjarkomField";
 import { useLocation } from "react-router-dom";
@@ -37,26 +37,27 @@ export default function HeroForm({ open, handleClose, selectedHero }) {
   const handleUpload = async () => {
     try {
       const formData = new FormData();
-      formData.append('avatar', uploadedImage);
-      formData.append('email', email);
+      formData.append("avatar", uploadedImage);
+      formData.append("email", email);
 
       const response = await axiosClient.post(
-        '/matjarcom/api/v1/store-slider-images',
+        "/matjarcom/api/v1/store-slider-images",
         formData,
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
 
       console.log(response.data);
       // Handle success response
     } catch (error) {
-      console.error('Error uploading image:', error);
+      console.error("Error uploading image:", error);
       // Handle error
     }
-  }; const handleCloseDialog = () => {
+  };
+  const handleCloseDialog = () => {
     handleClose();
   };
 
@@ -95,13 +96,16 @@ export default function HeroForm({ open, handleClose, selectedHero }) {
           value={"Image"}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <div {...getRootProps()} style={{
-          border: '2px dashed #cccccc',
-          borderRadius: '4px',
-          padding: '20px',
-          textAlign: 'center',
-          cursor: 'pointer',
-        }}>
+        <div
+          {...getRootProps()}
+          style={{
+            border: "2px dashed #cccccc",
+            borderRadius: "4px",
+            padding: "20px",
+            textAlign: "center",
+            cursor: "pointer",
+          }}
+        >
           <input {...getInputProps()} />
           <p>Drag 'n' drop an image here, or click to select an image</p>
         </div>
