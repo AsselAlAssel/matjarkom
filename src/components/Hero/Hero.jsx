@@ -12,6 +12,8 @@ import DeleteDialog from "../DeleteDialog/DeleteDialog";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../Stores/project/auth";
 import { useLocation } from "react-router-dom";
+import { useDeleteImageFromSlider } from "../../hooks/useMerchant";
+import { mutate } from "swr";
 
 const HeroData = [
   {
@@ -52,6 +54,11 @@ const Hero = ({ images }) => {
   const email = new URLSearchParams(location.search).get("email");
   const user = useSelector(selectUser);
   const isOwner = user?.email === email && user?.isMerchant;
+
+  const {
+    trigger: deleteImageFromSlider,
+    isMutating: isDeletingImageFromSlider,
+  } = useDeleteImageFromSlider(email);
   return (
     <div className="container">
       <div
@@ -73,7 +80,7 @@ const Hero = ({ images }) => {
                     }}
                     onClick={(e) => {
                       e.stopPropagation();
-                      setSelectedHero(data);
+                      setSelectedHero(url);
                       handleOpen(e);
                     }}
                   />
@@ -125,14 +132,6 @@ const Hero = ({ images }) => {
       >
         <MenuItem
           onClick={() => {
-            setOpen(true);
-            handleClose();
-          }}
-        >
-          Edit Hero
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
             setDeleteDialogOpen(true);
             handleClose();
           }}
@@ -145,11 +144,15 @@ const Hero = ({ images }) => {
         handleDeleteDialogClose={() => {
           setDeleteDialogOpen(false);
         }}
-        handleDelete={() => {
+        handleDelete={async () => {
+          await deleteImageFromSlider({ url: selectedHero });
+          mutate(`test-get-merchant-cart/${email}`);
+          setSelectedHero(null);
           setDeleteDialogOpen(false);
         }}
         title={"Delete Hero"}
         description={"Are you sure you want to delete this hero?"}
+        isDeleting={isDeletingImageFromSlider}
       />
     </div>
   );

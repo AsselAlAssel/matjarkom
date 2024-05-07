@@ -22,14 +22,24 @@ const Products = ({ products, email }) => {
         <div className="mb-10">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 place-items-center">
             {products?.slice(0, 4)?.map((data, index) => (
-              <ProductCard data={data} aosDelay={index * 150} email={email} />
+              <ProductCard
+                data={data}
+                aosDelay={index * 150}
+                email={email}
+                key={index}
+              />
             ))}
           </div>
         </div>
         <div className="mb-10">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 place-items-center">
             {products?.slice(4, 8)?.map((data, index) => (
-              <ProductCard data={data} aosDelay={index * 150} email={email} />
+              <ProductCard
+                data={data}
+                aosDelay={index * 150}
+                email={email}
+                key={index}
+              />
             ))}
           </div>
         </div>

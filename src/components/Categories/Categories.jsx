@@ -25,7 +25,7 @@ const Categories = ({ categories }) => {
   const user = useSelector(selectUser);
   const isOwner = user?.email === email && user?.isMerchant;
   const index = useMemo(() => {
-    return categories.indexOf(selectedCategory);
+    return categories?.indexOf(selectedCategory);
   }, [selectedCategory, categories]);
 
   const { trigger: createCategory, isMutating } = useCreateCategory(email);
@@ -113,6 +113,7 @@ const Categories = ({ categories }) => {
         }}
         title={"Delete Category"}
         description={"Are you sure you want to delete this category?"}
+        isDeleting={isDeleting}
       />
     </div>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import Navbar from "../components/Navbar/Navbar";
 import { useLocation, useParams } from "react-router-dom";
 import Footer from "../components/Footer/Footer";
@@ -13,6 +13,10 @@ import {
   useStoreProducts,
   useUpdateProductMutation,
 } from "../hooks/useMerchant";
+import { mutate } from "swr";
+import { useDropzone } from "react-dropzone";
+import axiosClient from "../Plugins/axios";
+import { enqueueSnackbar } from "notistack";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -28,6 +32,45 @@ export default function ProductDetails() {
   const index = products?.findIndex((product) => product._id === id);
   const { trigger: updateProduct, isMutating: isUpdating } =
     useUpdateProductMutation(email);
+  const [isUploading, setIsUploading] = React.useState(false);
+  const isLogged = user?.email;
+
+  const onDrop = useCallback(async (acceptedFiles) => {
+    setIsUploading(true);
+    const file = acceptedFiles[0];
+    const formData = new FormData();
+    formData.append("avatar", file);
+    formData.append("email", email);
+    formData.append("index", index);
+
+    try {
+      const response = await axiosClient.post(
+        "/cart-upload-primary-image",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+      console.log(response.data);
+      setIsUploading(false);
+      mutate(`test-get-merchant-cart/${email}`);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      // Handle error
+    }
+  }, []);
+  const {
+    getRootProps,
+    getInputProps,
+    open: openFileChooser,
+  } = useDropzone({
+    accept: {
+      "image/*": [".png", ".gif", ".jpeg", ".jpg"],
+    },
+    onDrop,
+  });
 
   return (
     <div className="container">
@@ -86,12 +129,13 @@ export default function ProductDetails() {
                     textWrap: "wrap",
                   },
                 }}
-                onBlur={(e) => {
-                  updateProduct({
+                onBlur={async (e) => {
+                  await updateProduct({
                     ...product,
                     cartName: e.target.value,
                     index,
                   });
+                  mutate(`test-get-merchant-cart/${email}`);
                 }}
               />
               <MatjarkomField
@@ -129,6 +173,14 @@ export default function ProductDetails() {
                     }
                   }
                 }}
+                onBlur={async (e) => {
+                  await updateProduct({
+                    ...product,
+                    cartPrice: e.target.value,
+                    index,
+                  });
+                  mutate(`test-get-merchant-cart/${email}`);
+                }}
               />
               <MatjarkomField
                 variant="standard"
@@ -155,21 +207,46 @@ export default function ProductDetails() {
                     textWrap: "wrap",
                   },
                 }}
+                onBlur={async (e) => {
+                  await updateProduct({
+                    ...product,
+                    cartDescription: e.target.value,
+                    index,
+                  });
+                  mutate(`test-get-merchant-cart/${email}`);
+                }}
               />
             </Stack>
-            <Button
-              text="Add to Cart"
-              bgColor={"bg-primary"}
-              textColor={"text-white"}
-              onClick={() => {
-                dispatch(
-                  addOrder({
-                    ...product,
-                    qty: 1,
-                  }),
-                );
-              }}
-            />
+            <Stack spacing={1} direction={"row"}>
+              <Button
+                text="Add to Cart"
+                bgColor={"bg-primary"}
+                textColor={"text-white"}
+                onClick={() => {
+                  console.log("product", isLogged);
+                  if (!isLogged) {
+                    enqueueSnackbar("Please login to add to cart", {
+                      variant: "error",
+                    });
+                    return;
+                  }
+                  dispatch(
+                    addOrder({
+                      ...product,
+                      qty: 1,
+                    }),
+                  );
+                }}
+              />
+              {isOwner ? (
+                <Button
+                  text={isUploading ? "Uploading..." : "Change Image"}
+                  bgColor={isUploading ? "bg-gray-300" : "bg-black"}
+                  textColor={isUploading ? "text-black" : "text-white"}
+                  onClick={openFileChooser}
+                />
+              ) : null}
+            </Stack>
           </Grid>
         </Grid>
         <Footer />

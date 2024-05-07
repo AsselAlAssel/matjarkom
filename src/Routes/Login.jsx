@@ -49,7 +49,8 @@ export default function Login() {
   if (data) {
     localStorage.setItem("token", data.data.token);
     dispatch(saveUserData({ ...data.data, isMerchant: false }));
-    navigate(redirect ? redirect : "/");
+
+    // navigate(redirect ? redirect : "/");
   }
   if (dataMerchant) {
     localStorage.setItem("token", dataMerchant.data.token);

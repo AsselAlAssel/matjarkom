@@ -36,6 +36,7 @@ export default function DeleteDialog(props) {
     handleDelete,
     title,
     description,
+    isDeleting,
   } = props;
   return (
     <Dialog
@@ -103,6 +104,7 @@ export default function DeleteDialog(props) {
                 backgroundColor: "#E0E0E0",
               },
             }}
+            disabled={isDeleting}
           >
             Cancel
           </StyledButton>
@@ -117,6 +119,7 @@ export default function DeleteDialog(props) {
                 backgroundColor: "#cf2b1f",
               },
             }}
+            disabled={isDeleting}
           >
             Delete
           </StyledButton>

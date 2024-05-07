@@ -31,7 +31,7 @@ const orderSlice = createSlice({
     },
     updateOrder: (state, action) => {
       state.orders = state.orders.map((order) =>
-        order.id === action.payload._id ? action.payload : order,
+        order._id === action.payload._id ? action.payload : order,
       );
     },
   },

@@ -105,7 +105,7 @@ export default function SideBar({ openDrawer, setOpenDrawer }) {
       <Box>
         <h2 className="text-xl font-semibold">
           Total: $
-          {orders.reduce((acc, order) => acc + order.qty * order.price, 0)}
+          {orders.reduce((acc, order) => acc + order.qty * order.cartPrice, 0)}
         </h2>
       </Box>
     </Drawer>

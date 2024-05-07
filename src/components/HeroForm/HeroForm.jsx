@@ -16,6 +16,7 @@ import MatjarkomField from "../MatjarkomField/MatjarkomField";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import axiosClient from "../../Plugins/axios";
+import { enqueueSnackbar } from "notistack";
 
 const defaultValues = {
   img: "",
@@ -37,11 +38,11 @@ export default function HeroForm({ open, handleClose, selectedHero }) {
   const handleUpload = async () => {
     try {
       const formData = new FormData();
-      formData.append("avatar", uploadedImage);
+      formData.append("avatar", uploadedImage); // Ensure "avatar" matches the key expected by the backend
       formData.append("email", email);
 
       const response = await axiosClient.post(
-        "/matjarcom/api/v1/store-slider-images",
+        "/store-slider-images",
         formData,
         {
           headers: {
@@ -53,10 +54,14 @@ export default function HeroForm({ open, handleClose, selectedHero }) {
       console.log(response.data);
       // Handle success response
     } catch (error) {
+      enqueueSnackbar("Error uploading image", {
+        variant: "error",
+      });
       console.error("Error uploading image:", error);
       // Handle error
     }
   };
+
   const handleCloseDialog = () => {
     handleClose();
   };

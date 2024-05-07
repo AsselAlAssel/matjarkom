@@ -62,18 +62,22 @@ export const useStoreProducts = (email) => {
 };
 // cartName, cartPrice, cartDiscount, cartLiked, cartFavourite, cartDescription, cartCategory, cartQuantities, index, cartRate
 const updateProduct = async (key, { arg }) => {
-  return axiosClient.put(key, {
-    cartName: arg.cartName,
-    cartPrice: arg.cartPrice,
-    cartDiscount: arg.cartDiscount,
-    cartLiked: arg.cartLiked,
-    cartFavourite: arg.cartFavourite,
-    cartDescription: arg.cartDescription,
-    cartCategory: arg.cartCategory,
-    cartQuantities: arg.cartQuantities,
-    index: arg.index,
-    cartRate: arg.cartRate,
-  });
+  try {
+    return axiosClient.patch(key, {
+      cartName: arg.cartName,
+      cartPrice: arg.cartPrice,
+      cartDiscount: arg.cartDiscount,
+      cartLiked: arg.cartLiked,
+      cartFavourite: arg.cartFavourite,
+      cartDescription: arg.cartDescription,
+      cartCategory: arg.cartCategory,
+      cartQuantities: arg.cartQuantities,
+      index: arg.index,
+      cartRate: arg.cartRate,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const useUpdateProductMutation = (email) => {
@@ -97,7 +101,7 @@ export const useCreateCategory = (email) => {
 
 const deleteCategory = async (key, { arg }) => {
   console.log(key, arg);
-  return axiosClient.delete(key, arg);
+  return axiosClient.delete(key, { data: arg });
 };
 
 export const useDeleteCategory = (email) => {
@@ -108,15 +112,25 @@ export const useDeleteCategory = (email) => {
   return { trigger, isMutating, error };
 };
 
-const updateCategory = async (key, { arg }) => {
-  console.log(key, arg);
+async function updateCategory(key, { arg }) {
   return axiosClient.patch(key, arg);
-};
+}
 
 export const useUpdateCategory = (email) => {
   const { trigger, isMutating, error } = useSWRMutation(
     `update-specific-store-categories/${email}`,
     updateCategory,
+  );
+  return { trigger, isMutating, error };
+};
+
+async function deleteImageFromSlider(key, { arg }) {
+  return axiosClient.delete(key, { data: arg });
+}
+export const useDeleteImageFromSlider = (email) => {
+  const { trigger, isMutating, error } = useSWRMutation(
+    `delete-specific-image-from-store-slider/${email}`,
+    deleteImageFromSlider,
   );
   return { trigger, isMutating, error };
 };

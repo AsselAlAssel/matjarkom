@@ -24,10 +24,13 @@ const MenuLinks = [
 const Navbar = ({ hideCart, links, logo, logoLink, hideSignIn }) => {
   const orders = useSelector(getOrder);
   const navigate = useNavigate();
+  const location = useLocation();
+  const email = new URLSearchParams(location.search).get("email");
   const [openDrawer, setOpenDrawer] = useState(false);
   const { pathname } = useLocation();
   const user = useSelector(selectUser);
   const ifUserLoggedIn = user?.email;
+
   return (
     <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 relative z-40">
       <div className="py-4">
@@ -59,7 +62,7 @@ const Navbar = ({ hideCart, links, logo, logoLink, hideSignIn }) => {
                   : MenuLinks.map((data, index) => (
                       <li key={index}>
                         <Link
-                          to={data.link}
+                          to={data.link + `?email=${email}`}
                           className="inline-block px-4 font-semibold text-gray-500 hover:text-black dark:hover:text-white duration-200"
                         >
                           {" "}
@@ -91,7 +94,8 @@ const Navbar = ({ hideCart, links, logo, logoLink, hideSignIn }) => {
                 {/* <DarkMode /> */}
                 <Button
                   onClick={() => {
-                    navigate(`/login?redirect=${pathname}`);
+                    console.log(pathname);
+                    // navigate(`/login?redirect=${pathname}`);
                   }}
                   sx={{
                     backgroundColor: "black",
