@@ -60,7 +60,6 @@ export const useStoreProducts = (email) => {
   );
   return { data, error, isLoading, mutate };
 };
-// cartName, cartPrice, cartDiscount, cartLiked, cartFavourite, cartDescription, cartCategory, cartQuantities, index, cartRate
 const updateProduct = async (key, { arg }) => {
   try {
     return axiosClient.patch(key, {
@@ -87,6 +86,31 @@ export const useUpdateProductMutation = (email) => {
   );
   return { trigger, isMutating, error };
 };
+
+async function createProduct(key, { arg }) {
+  return axiosClient.post(key, arg);
+}
+
+export const useCreateProduct = (email) => {
+  const { trigger, isMutating, error } = useSWRMutation(
+    `test-specific-cart/${email}`,
+    createProduct,
+  );
+  return { trigger, isMutating, error };
+};
+
+export const deleteProduct = async (key, { arg }) => {
+  return axiosClient.delete(key, { data: arg });
+};
+
+export const useDeleteProduct = (email) => {
+  const { trigger, isMutating, error } = useSWRMutation(
+    `delete-cart/${email}`,
+    deleteProduct,
+  );
+  return { trigger, isMutating, error };
+};
+
 const createCategory = async (key, { arg }) => {
   return axiosClient.post(key, arg);
 };
@@ -131,6 +155,18 @@ export const useDeleteImageFromSlider = (email) => {
   const { trigger, isMutating, error } = useSWRMutation(
     `delete-specific-image-from-store-slider/${email}`,
     deleteImageFromSlider,
+  );
+  return { trigger, isMutating, error };
+};
+
+async function registerMerchant(key, { arg }) {
+  return axiosClient.post(key, arg);
+}
+
+export const useRegisterMerchant = () => {
+  const { trigger, isMutating, error } = useSWRMutation(
+    "/merchant-register",
+    registerMerchant,
   );
   return { trigger, isMutating, error };
 };

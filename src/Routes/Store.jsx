@@ -61,9 +61,9 @@ const Home = () => {
         <Categories categories={profile?.specificStoreCategories} />
       )}
       <Services />
-      <Banner data={BannerData} />
+      {/* <Banner data={BannerData} /> */}
       <Products products={products} email={email} />
-      <Blogs />
+      {/* <Blogs /> */}
       <Footer />
 
       <Popup orderPopup={orderPopup} handleOrderPopup={handleOrderPopup} />

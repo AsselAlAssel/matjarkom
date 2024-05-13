@@ -2,7 +2,7 @@ import React from "react";
 import Navbar from "../components/Navbar/Navbar";
 import { Box, Stack, Tab, Tabs } from "@mui/material";
 import UserForm from "../components/UserForm/UserForm";
-import MarchantForm from "../components/MarchantForm/MarchantFrom";
+import MerchantForm from "../components/MerchantForm/MerchantForm";
 
 export default function Register() {
   const [value, setValue] = React.useState(0);
@@ -27,7 +27,7 @@ export default function Register() {
           }}
         >
           {value === 0 ? <UserForm /> : null}
-          {value === 1 ? <MarchantForm /> : null}
+          {value === 1 ? <MerchantForm /> : null}
         </Box>
       </Box>
     </div>

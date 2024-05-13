@@ -43,20 +43,22 @@ const Products = ({ products, email }) => {
             ))}
           </div>
         </div>
-        <div
-          data-aos={"fade-up"}
-          data-aos-delay={100}
-          className="flex justify-center"
-        >
-          <Button
-            text={"View All Products"}
-            bgColor={"bg-primary"}
-            textColor={"text-white"}
-            onClick={() => {
-              navigate(`/products?email=${email}`);
-            }}
-          />
-        </div>
+        {products && products.length > 8 ? (
+          <div
+            data-aos={"fade-up"}
+            data-aos-delay={100}
+            className="flex justify-center"
+          >
+            <Button
+              text={"View All Products"}
+              bgColor={"bg-primary"}
+              textColor={"text-white"}
+              onClick={() => {
+                navigate(`/products?email=${email}`);
+              }}
+            />
+          </div>
+        ) : null}
       </div>
     </div>
   );

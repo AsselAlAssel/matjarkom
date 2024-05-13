@@ -7,7 +7,8 @@ import {
   FaLinkedin,
   FaLocationArrow,
 } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useStoreProfile } from "../../hooks/useMerchant";
 
 const FooterLinks = [
   {
@@ -29,6 +30,12 @@ const FooterLinks = [
 ];
 
 const Footer = ({ logo, logoLink, companyDetails }) => {
+  const location = useLocation();
+  const email = new URLSearchParams(location.search).get("email");
+  const { data } = useStoreProfile(email);
+  const profile = data?.data;
+
+  console.log(data);
   return (
     <div className="dark:bg-gray-950">
       <div className="container">
@@ -45,16 +52,14 @@ const Footer = ({ logo, logoLink, companyDetails }) => {
           {/* company details */}
           <div className="py-4 px-4">
             <Link
-              to={logoLink ? logoLink : "/"}
+              to={logoLink ? logoLink : `/store?email=${email}`}
               className="text-primary font-semibold tracking-widest text-2xl uppercase sm:text-3xl
 "
             >
-              {logo ? logo : "Company Name"}
+              {logo ? logo : profile?.storeName}
             </Link>
             <p className="text-gray-600 dark:text-white/70  lg:pr-24 pt-3">
-              {companyDetails
-                ? companyDetails
-                : "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maiores alias cum"}
+              {companyDetails ? companyDetails : profile?.storeDescription}
             </p>
           </div>
           {/* Company Address */}
@@ -63,11 +68,11 @@ const Footer = ({ logo, logoLink, companyDetails }) => {
             <div>
               <div className="flex items-center gap-3">
                 <FaLocationArrow />
-                <p>Noida , Uttar Pradesh</p>
+                <p>{profile?.country}</p>
               </div>
               <div className="flex items-center gap-3 mt-6">
                 <FaMobileAlt />
-                <p>+91 1234567890</p>
+                <p>{profile?.phone}</p>
               </div>
 
               {/* social links */}

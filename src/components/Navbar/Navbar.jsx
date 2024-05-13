@@ -50,26 +50,26 @@ const Navbar = ({ hideCart, links, logo, logoLink, hideSignIn }) => {
               <ul className="flex items-center gap-4">
                 {links
                   ? links.map((data, index) => (
-                    <li key={index}>
-                      <Link
-                        to={data.to}
-                        className="inline-block px-4 font-semibold text-gray-500 hover:text-black dark:hover:text-white duration-200"
-                      >
-                        {data.title}
-                      </Link>
-                    </li>
-                  ))
+                      <li key={index}>
+                        <Link
+                          to={data.to}
+                          className="inline-block px-4 font-semibold text-gray-500 hover:text-black dark:hover:text-white duration-200"
+                        >
+                          {data.title}
+                        </Link>
+                      </li>
+                    ))
                   : MenuLinks.map((data, index) => (
-                    <li key={index}>
-                      <Link
-                        to={data.link + `?email=${email}`}
-                        className="inline-block px-4 font-semibold text-gray-500 hover:text-black dark:hover:text-white duration-200"
-                      >
-                        {" "}
-                        {data.name}
-                      </Link>
-                    </li>
-                  ))}
+                      <li key={index}>
+                        <Link
+                          to={data.link + `?email=${email}`}
+                          className="inline-block px-4 font-semibold text-gray-500 hover:text-black dark:hover:text-white duration-200"
+                        >
+                          {" "}
+                          {data.name}
+                        </Link>
+                      </li>
+                    ))}
               </ul>
             </div>
           </div>
@@ -115,9 +115,11 @@ const Navbar = ({ hideCart, links, logo, logoLink, hideSignIn }) => {
               <div>
                 {/* <DarkMode /> */}
                 <Button
-                  // onClick={() => {
-                  //   navigate(`/login?redirect=${pathname}`);
-                  // }}
+                  onClick={() => {
+                    localStorage.removeItem("token");
+                    navigate(`/login`);
+                    window.location.reload();
+                  }}
                   sx={{
                     backgroundColor: "black",
                     fontSize: "1rem",

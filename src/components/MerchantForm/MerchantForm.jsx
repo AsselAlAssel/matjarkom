@@ -2,28 +2,46 @@ import { Autocomplete, Box, Button, Stack } from "@mui/material";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import MatjarkomField from "../MatjarkomField/MatjarkomField";
-
-const typeOptions = [
-  { id: "food", label: "Food" },
-  { id: "clothes", label: "Clothes" },
-  { id: "electronics", label: "Electronics" },
-  { id: "accessories", label: "Accessories" },
-  { id: "other", label: "Other" },
-];
+import { useRegisterMerchant } from "../../hooks/useMerchant";
+import { enqueueSnackbar } from "notistack";
+import { useNavigate } from "react-router-dom";
 
 const defaultValues = {
-  name: "",
   email: "",
   password: "",
   phone: "",
   country: "",
-  store_name: "",
-  store_description: "",
-  type: "",
+  merchantname: "",
+  storeName: "",
+  storeDescription: "",
+  storeCategory: "",
 };
 
 export default function MarchantForm() {
   const { control, reset, handleSubmit } = useForm({ defaultValues });
+  const navigate = useNavigate();
+  const {
+    trigger: registerMerchant,
+    isMutating: isRegistering,
+    error: registerError,
+  } = useRegisterMerchant();
+
+  const onSubmit = async (data) => {
+    try {
+      await registerMerchant(data);
+      enqueueSnackbar("Merchant registered successfully", {
+        variant: "success",
+      });
+      navigate("/login");
+    } catch (error) {
+      enqueueSnackbar(
+        error?.response?.data?.message ?? "Something went wrong",
+        {
+          variant: "error",
+        },
+      );
+    }
+  };
   return (
     <Box
       sx={{
@@ -39,7 +57,7 @@ export default function MarchantForm() {
       <form>
         <Stack spacing={2}>
           <Controller
-            name="name"
+            name="merchantname"
             control={control}
             rules={{ required: "Name is required" }}
             render={({ field, fieldState: { error } }) => (
@@ -111,7 +129,7 @@ export default function MarchantForm() {
             )}
           />
           <Controller
-            name="store_name"
+            name="storeName"
             control={control}
             rules={{ required: "Store Name is required" }}
             render={({ field, fieldState: { error } }) => (
@@ -125,7 +143,7 @@ export default function MarchantForm() {
             )}
           />
           <Controller
-            name="store_description"
+            name="storeDescription"
             control={control}
             rules={{ required: "Store Description is required" }}
             render={({ field, fieldState: { error } }) => (
@@ -139,24 +157,16 @@ export default function MarchantForm() {
             )}
           />
           <Controller
-            name="type"
+            name="storeCategory"
             control={control}
             rules={{ required: "Type is required" }}
             render={({ field, fieldState: { error } }) => (
-              <Autocomplete
+              <MatjarkomField
+                label="Store Category"
+                required
+                error={!!error}
+                helperText={error ? error.message : null}
                 {...field}
-                options={typeOptions}
-                getOptionLabel={(option) => option.label}
-                value={typeOptions.find((option) => option.id === field.value)}
-                renderInput={(params) => (
-                  <MatjarkomField
-                    {...params}
-                    label="Type"
-                    required
-                    error={!!error}
-                    helperText={error ? error.message : null}
-                  />
-                )}
               />
             )}
           />
@@ -169,8 +179,7 @@ export default function MarchantForm() {
               variant="contained"
               color="primary"
               onClick={handleSubmit((data) => {
-                console.log(data);
-                reset(defaultValues);
+                onSubmit(data);
               })}
             >
               Submit

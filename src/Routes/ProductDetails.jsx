@@ -1,6 +1,11 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import Navbar from "../components/Navbar/Navbar";
-import { useLocation, useParams } from "react-router-dom";
+import {
+  Navigate,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import Footer from "../components/Footer/Footer";
 import { Grid, Stack, Typography } from "@mui/material";
 import Button from "../components/Shared/Button";
@@ -10,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addOrder } from "../Stores/project/orders";
 import { selectUser } from "../Stores/project/auth";
 import {
+  useDeleteProduct,
   useStoreProducts,
   useUpdateProductMutation,
 } from "../hooks/useMerchant";
@@ -17,6 +23,7 @@ import { mutate } from "swr";
 import { useDropzone } from "react-dropzone";
 import axiosClient from "../Plugins/axios";
 import { enqueueSnackbar } from "notistack";
+import DeleteDialog from "../components/DeleteDialog/DeleteDialog";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -34,6 +41,13 @@ export default function ProductDetails() {
     useUpdateProductMutation(email);
   const [isUploading, setIsUploading] = React.useState(false);
   const isLogged = user?.email;
+  const {
+    trigger: deleteProduct,
+    isMutating: isDeleting,
+    error: deleteError,
+  } = useDeleteProduct(email);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const navigate = useNavigate();
 
   const onDrop = useCallback(async (acceptedFiles) => {
     setIsUploading(true);
@@ -86,21 +100,19 @@ export default function ProductDetails() {
           }}
         >
           <Grid item xs={12} sm={4}>
-            <img
-              src={product?.cartPrimaryImage}
-              alt="product"
-              height={"100%"}
-              width={"100%"}
-            />
-            {/* {product?.cartSecondaryImagesSlider?.map((image, index) => (
+            {product.cartPrimaryImage ===
+            "https://th.bing.com/th/id/OIP.gP1tVKJUehx7kX43qmrSswHaHa?w=176&h=180&c=7&r=0&o=5&pid=1.7" ? (
+              <div className="h-full w-full bg-gray-200 dark:bg-gray-700 rounded-md flex items-center justify-center">
+                <p className="text-gray-500 dark:text-gray-400">No Image</p>
+              </div>
+            ) : (
               <img
-                key={index}
-                src={image}
+                src={product?.cartPrimaryImage}
                 alt="product"
                 height={"100%"}
                 width={"100%"}
               />
-            ))} */}
+            )}
           </Grid>
           <Grid item xs={12} sm={6}>
             <Stack spacing={1} mb={5}>
@@ -217,7 +229,12 @@ export default function ProductDetails() {
                 }}
               />
             </Stack>
-            <Stack spacing={1} direction={"row"}>
+            <Stack
+              gap={1.5}
+              direction={"row"}
+              alignItems={"center"}
+              flexWrap={"wrap"}
+            >
               <Button
                 text="Add to Cart"
                 bgColor={"bg-primary"}
@@ -246,11 +263,44 @@ export default function ProductDetails() {
                   onClick={openFileChooser}
                 />
               ) : null}
+              {isOwner ? (
+                <Button
+                  text="Delete"
+                  bgColor={"bg-red-500"}
+                  textColor={"text-white"}
+                  onClick={() => setShowDeleteDialog(true)}
+                />
+              ) : null}
             </Stack>
           </Grid>
         </Grid>
         <Footer />
       </div>
+      <DeleteDialog
+        deleteDialogOpen={showDeleteDialog}
+        handleDeleteDialogClose={() => setShowDeleteDialog(false)}
+        handleDelete={async () => {
+          try {
+            await deleteProduct({ index, email });
+            mutate(`test-get-merchant-cart/${email}`);
+            setShowDeleteDialog(false);
+            enqueueSnackbar("Product deleted successfully", {
+              variant: "success",
+            });
+            navigate("/products?email=" + email);
+          } catch (error) {
+            enqueueSnackbar(
+              error?.response?.data?.message ?? "Something went wrong",
+              {
+                variant: "error",
+              },
+            );
+          }
+        }}
+        title="Delete Product"
+        description="Are you sure you want to delete this product?"
+        isDeleting={isDeleting}
+      />
     </div>
   );
 }
