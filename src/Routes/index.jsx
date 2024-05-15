@@ -6,6 +6,7 @@ import Register from "./Register";
 import Store from "./Store";
 import Home from "./Home";
 import Stores from "./Stores";
+import Profile from "./Profile";
 
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <Register />,
+  },
+  {
+    path: "/profile",
+    element: <Profile />,
   },
 ]);
 

@@ -17,8 +17,9 @@ import ProductForm from "../components/ProductForm/ProductForm";
 
 export default function Products() {
   const location = useLocation();
-  const [category, setCategory] = React.useState();
   const email = new URLSearchParams(location.search).get("email");
+  const categoryParams = new URLSearchParams(location.search).get("category");
+  const [category, setCategory] = React.useState(categoryParams || "");
   const user = useSelector(selectUser);
   const isOwner = user?.email === email && user?.isMerchant;
   const { data } = useStoreProducts(email);
@@ -28,6 +29,7 @@ export default function Products() {
     if (!category) return products;
     return products?.filter((product) => product.cartCategory === category);
   });
+  console.log(filteredProducts);
   const [open, setOpen] = useState(false);
   return (
     <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 overflow-hidden">

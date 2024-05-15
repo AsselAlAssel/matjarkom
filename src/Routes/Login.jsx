@@ -49,8 +49,7 @@ export default function Login() {
   if (data) {
     localStorage.setItem("token", data.data.token);
     dispatch(saveUserData({ ...data.data, isMerchant: false }));
-
-    // navigate(redirect ? redirect : "/");
+    navigate(redirect ? redirect : "/stores");
   }
   if (dataMerchant) {
     localStorage.setItem("token", dataMerchant.data.token);
@@ -122,18 +121,6 @@ export default function Login() {
               Sign In
             </Button>
             <Grid container>
-              <Grid item xs>
-                <Link to="/login">
-                  <MuiLink
-                    variant="body2"
-                    sx={{
-                      textDecoration: "none",
-                    }}
-                  >
-                    Forgot password?
-                  </MuiLink>
-                </Link>
-              </Grid>
               <Grid item>
                 <Link to="/register">
                   <MuiLink

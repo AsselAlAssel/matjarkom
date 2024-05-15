@@ -170,3 +170,22 @@ export const useRegisterMerchant = () => {
   );
   return { trigger, isMutating, error };
 };
+
+async function updateMerchant(key, { arg }) {
+  return axiosClient.patch(key, arg);
+}
+export const useMerchantUpdate = (email) => {
+  const { trigger, isMutating, error } = useSWRMutation(
+    `merchant-update/${email}`,
+    updateMerchant,
+  );
+  return { trigger, isMutating, error };
+};
+
+export const useUpdateStoreInfo = (email) => {
+  const { trigger, isMutating, error } = useSWRMutation(
+    `update-store-informations/${email}`,
+    updateMerchant,
+  );
+  return { trigger, isMutating, error };
+};

@@ -3,6 +3,8 @@ import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import MatjarkomField from "../MatjarkomField/MatjarkomField";
 import { useRegisterUser } from "../../hooks/useUser";
+import { enqueueSnackbar } from "notistack";
+import { useNavigate } from "react-router-dom";
 
 const defaultValues = {
   username: "",
@@ -16,10 +18,16 @@ const defaultValues = {
 export default function UserForm() {
   const { control, reset, handleSubmit } = useForm({ defaultValues });
   const { register, data: ds } = useRegisterUser();
+  const navigate = useNavigate();
   const handleRegister = async (data) => {
-    console.log(data);
-    await register(data);
-    console.log(ds);
+    try {
+      await register(data);
+      enqueueSnackbar("User registered successfully", { variant: "success" });
+      reset();
+      navigate("/login");
+    } catch (e) {
+      enqueueSnackbar(e.message, { variant: "error" });
+    }
   };
   return (
     <Box

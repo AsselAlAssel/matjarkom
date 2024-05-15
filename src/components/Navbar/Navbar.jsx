@@ -10,9 +10,11 @@ import {
   useNavigate,
   useRouteError,
 } from "react-router-dom";
-import { Button, Drawer } from "@mui/material";
+import { Button, Drawer, IconButton, Menu, MenuItem } from "@mui/material";
 import SideBar from "../SideBar/SideBar";
 import { selectUser } from "../../Stores/project/auth";
+import { IoPersonCircle } from "react-icons/io5";
+import usePopoverState from "../../hooks/usePopoverState";
 
 const MenuLinks = [
   {
@@ -26,10 +28,14 @@ const Navbar = ({ hideCart, links, logo, logoLink, hideSignIn }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const email = new URLSearchParams(location.search).get("email");
+  const searchParams = new URLSearchParams(location.search);
+  //  console all the search params as string
+  console.log(searchParams.toString());
   const [openDrawer, setOpenDrawer] = useState(false);
   const { pathname } = useLocation();
   const user = useSelector(selectUser);
   const ifUserLoggedIn = user?.email;
+  const [open, anchorEl, handleOpen, handleClose] = usePopoverState();
 
   return (
     <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 relative z-40">
@@ -95,7 +101,9 @@ const Navbar = ({ hideCart, links, logo, logoLink, hideSignIn }) => {
                 <Button
                   onClick={() => {
                     console.log(pathname);
-                    navigate(`/login?redirect=${pathname}`);
+                    navigate(
+                      `/login?redirect=${pathname + "?" + searchParams.toString()}`,
+                    );
                   }}
                   sx={{
                     backgroundColor: "black",
@@ -113,31 +121,44 @@ const Navbar = ({ hideCart, links, logo, logoLink, hideSignIn }) => {
             )}
             {ifUserLoggedIn ? (
               <div>
-                {/* <DarkMode /> */}
-                <Button
-                  onClick={() => {
-                    localStorage.removeItem("token");
-                    navigate(`/login`);
-                    window.location.reload();
-                  }}
-                  sx={{
-                    backgroundColor: "black",
-                    fontSize: "1rem",
-                    fontWeight: "bold",
-                    color: "white",
-                    "&:hover": {
-                      backgroundColor: "black",
-                    },
-                  }}
-                >
-                  Sign Out
-                </Button>
+                <IoPersonCircle
+                  className="text-4xl text-gray-600 dark:text-gray-400 cursor-pointer"
+                  onClick={handleOpen}
+                />
               </div>
             ) : null}
           </div>
         </div>
       </div>
       <SideBar openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} />
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        PaperProps={{
+          sx: {
+            width: "20ch",
+          },
+        }}
+      >
+        <MenuItem
+          onClick={() => {
+            navigate("/profile?email=" + email);
+            handleClose();
+          }}
+        >
+          Profile
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            localStorage.removeItem("token");
+            navigate("/login");
+            handleClose();
+          }}
+        >
+          Logout
+        </MenuItem>
+      </Menu>
     </div>
   );
 };

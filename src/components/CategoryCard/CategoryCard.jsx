@@ -4,13 +4,14 @@ import Box from "@mui/material/Box";
 import ActionsIconButton from "../ActionsIconButton/ActionsIconButton";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../Stores/project/auth";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const CategoryCard = ({ setSelectedCategory, handleOpen, categoryName }) => {
   const location = useLocation();
   const email = new URLSearchParams(location.search).get("email");
   const user = useSelector(selectUser);
   const isOwner = user?.email === email && user?.isMerchant;
+  const navigate = useNavigate();
   return (
     <Box
       className="py-10 pl-5 text-white rounded-3xl relative h-[320px] flex items-end"
@@ -43,6 +44,9 @@ const CategoryCard = ({ setSelectedCategory, handleOpen, categoryName }) => {
             text="Browse"
             bgColor={"bg-primary"}
             textColor={"text-white"}
+            onClick={() =>
+              navigate(`/products?email=${email}&category=${categoryName}`)
+            }
           />
         </div>
       </div>
